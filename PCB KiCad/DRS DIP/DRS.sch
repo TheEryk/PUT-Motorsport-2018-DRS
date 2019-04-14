@@ -1,5 +1,4 @@
 EESchema Schematic File Version 4
-LIBS:DRS-cache
 EELAYER 29 0
 EELAYER END
 $Descr A4 11693 8268
@@ -755,11 +754,6 @@ Wire Wire Line
 	2850 1250 2850 1300
 Wire Wire Line
 	2850 1600 2850 1650
-Wire Wire Line
-	2850 1250 3150 1250
-Wire Wire Line
-	3150 1250 3150 1300
-Connection ~ 2850 1250
 Wire Wire Line
 	3150 1600 3150 1650
 Wire Wire Line
@@ -1686,4 +1680,17 @@ F 3 "" H 5100 5600 50  0001 C CNN
 	1    5100 5600
 	1    0    0    -1  
 $EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 5CC04586
+P 3150 1200
+F 0 "#PWR?" H 3150 950 50  0001 C CNN
+F 1 "GND" H 3155 1027 50  0000 C CNN
+F 2 "" H 3150 1200 50  0001 C CNN
+F 3 "" H 3150 1200 50  0001 C CNN
+	1    3150 1200
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	3150 1300 3150 1200
 $EndSCHEMATC

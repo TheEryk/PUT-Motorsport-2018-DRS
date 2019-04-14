@@ -1,4 +1,5 @@
 EESchema Schematic File Version 4
+LIBS:DRS-cache
 EELAYER 29 0
 EELAYER END
 $Descr A4 11693 8268
@@ -1080,10 +1081,6 @@ Text Label 3350 2750 0    50   ~ 0
 MISO
 Text Label 3350 2850 0    50   ~ 0
 SCK
-Text Label 3350 3550 0    50   ~ 0
-SCL
-Text Label 3350 3450 0    50   ~ 0
-SDA
 $Comp
 L power:GND #PWR0122
 U 1 1 5CC01262
@@ -1290,7 +1287,6 @@ NoConn ~ 3350 3350
 NoConn ~ 3350 3250
 NoConn ~ 3350 3150
 NoConn ~ 3350 3050
-NoConn ~ 3350 2350
 $Comp
 L Connector:Conn_01x03_Male J1
 U 1 1 5CD7B560
@@ -1647,4 +1643,47 @@ Wire Notes Line
 	6950 6400 11150 6400
 Wire Notes Line
 	11150 6400 11150 4450
+Text Label 3350 2350 0    50   ~ 0
+LED
+Text Label 5100 4650 0    50   ~ 0
+LED
+$Comp
+L Device:LED D1
+U 1 1 5CB2BB74
+P 5100 4900
+F 0 "D1" V 5139 4783 50  0000 R CNN
+F 1 "LED" V 5048 4783 50  0000 R CNN
+F 2 "LED_SMD:LED_1206_3216Metric" H 5100 4900 50  0001 C CNN
+F 3 "~" H 5100 4900 50  0001 C CNN
+	1    5100 4900
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	5100 5600 5100 5500
+Wire Wire Line
+	5100 4650 5100 4750
+Wire Wire Line
+	5100 5050 5100 5200
+$Comp
+L Device:R R11
+U 1 1 5CB2BB82
+P 5100 5350
+F 0 "R11" H 5170 5396 50  0000 L CNN
+F 1 "330" H 5170 5305 50  0000 L CNN
+F 2 "Resistor_SMD:R_1206_3216Metric" V 5030 5350 50  0001 C CNN
+F 3 "~" H 5100 5350 50  0001 C CNN
+	1    5100 5350
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR0137
+U 1 1 5CB396F3
+P 5100 5600
+F 0 "#PWR0137" H 5100 5350 50  0001 C CNN
+F 1 "GND" H 5105 5427 50  0000 C CNN
+F 2 "" H 5100 5600 50  0001 C CNN
+F 3 "" H 5100 5600 50  0001 C CNN
+	1    5100 5600
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
