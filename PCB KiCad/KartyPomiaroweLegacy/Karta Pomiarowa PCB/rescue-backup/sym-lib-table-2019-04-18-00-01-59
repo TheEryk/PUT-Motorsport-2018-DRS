@@ -1,0 +1,6 @@
+(sym_lib_table
+  (lib (name karta_pomiarowa-rescue)(type Legacy)(uri ${KIPRJMOD}/karta_pomiarowa-rescue.lib)(options "")(descr ""))
+  (lib (name dc-dc)(type Legacy)(uri ${KIPRJMOD}/dc-dc.lib)(options "")(descr ""))
+  (lib (name FCI)(type Legacy)(uri ${KIPRJMOD}/FCI.lib)(options "")(descr ""))
+  (lib (name external_gold_pins)(type Legacy)(uri ${KIPRJMOD}/external_gold_pins.lib)(options "")(descr ""))
+)
