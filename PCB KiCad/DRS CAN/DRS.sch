@@ -1,4 +1,5 @@
 EESchema Schematic File Version 4
+LIBS:DRS-cache
 EELAYER 29 0
 EELAYER END
 $Descr A4 11693 8268
@@ -35,8 +36,6 @@ F 3 "" H 10950 2100 50  0001 C CNN
 	1    10950 2100
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	10450 1800 10950 1800
 Wire Wire Line
 	10450 2100 10950 2100
 $Comp
@@ -397,7 +396,7 @@ U 1 1 5CBB2482
 P 2950 1150
 F 0 "L1" H 3002 1196 50  0000 L CNN
 F 1 "10u" H 3002 1105 50  0000 L CNN
-F 2 "Connector_PinSocket_2.54mm:PinSocket_1x02_P2.54mm_Vertical" H 2950 1150 50  0001 C CNN
+F 2 "Inductor_SMD:L_1812_4532Metric" H 2950 1150 50  0001 C CNN
 F 3 "~" H 2950 1150 50  0001 C CNN
 	1    2950 1150
 	1    0    0    -1  
@@ -842,9 +841,9 @@ Wire Wire Line
 Connection ~ 2900 5800
 Wire Wire Line
 	2900 5800 2950 5800
-Text Label 10450 2000 0    50   ~ 0
-CANH
 Text Label 10450 1900 0    50   ~ 0
+CANH
+Text Label 10450 1800 0    50   ~ 0
 CANL
 Wire Wire Line
 	7350 5000 7750 5000
@@ -1161,14 +1160,30 @@ $EndComp
 Wire Wire Line
 	3450 1400 3550 1400
 $Comp
-L power:+5V #PWR?
+L power:+5V #PWR0120
 U 1 1 5CBE5E3B
 P 10500 1000
-F 0 "#PWR?" H 10500 850 50  0001 C CNN
+F 0 "#PWR0120" H 10500 850 50  0001 C CNN
 F 1 "+5V" H 10515 1173 50  0000 C CNN
 F 2 "" H 10500 1000 50  0001 C CNN
 F 3 "" H 10500 1000 50  0001 C CNN
 	1    10500 1000
 	0    -1   -1   0   
 $EndComp
+$Comp
+L power:+12V #PWR0121
+U 1 1 5CD290AD
+P 10950 1800
+F 0 "#PWR0121" H 10950 1650 50  0001 C CNN
+F 1 "+12V" H 10965 1973 50  0000 C CNN
+F 2 "" H 10950 1800 50  0001 C CNN
+F 3 "" H 10950 1800 50  0001 C CNN
+	1    10950 1800
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	10950 1800 10950 2000
+Wire Wire Line
+	10950 2000 10450 2000
+Connection ~ 10950 1800
 $EndSCHEMATC
