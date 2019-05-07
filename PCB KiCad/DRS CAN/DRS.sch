@@ -716,7 +716,7 @@ Wire Notes Line
 Wire Notes Line
 	11150 6400 11150 4450
 Text Label 7550 3150 0    50   ~ 0
-LED
+LED1
 $Comp
 L Device:LED D1
 U 1 1 5CB2BB74
@@ -908,13 +908,7 @@ Wire Notes Line
 Wire Notes Line
 	11100 1200 11100 600 
 Wire Notes Line
-	7450 4350 7850 4350
-Wire Notes Line
 	7850 4350 7850 3050
-Wire Notes Line
-	7850 3050 7450 3050
-Wire Notes Line
-	7450 3050 7450 4350
 Wire Notes Line
 	8550 2250 9800 2250
 Wire Notes Line
@@ -1095,7 +1089,7 @@ F 3 "~" H 6000 6750 50  0001 C CNN
 	0    1    1    0   
 $EndComp
 Text Label 3450 2950 0    50   ~ 0
-LED
+LED1
 Text Label 8200 1050 2    50   ~ 0
 PWM2
 Text Label 8200 950  2    50   ~ 0
@@ -1186,4 +1180,96 @@ Wire Wire Line
 Wire Wire Line
 	10950 2000 10450 2000
 Connection ~ 10950 1800
+Text Label 3450 3150 0    50   ~ 0
+LED2
+Text Label 3450 3250 0    50   ~ 0
+LED3
+Text Label 7150 3150 0    50   ~ 0
+LED2
+$Comp
+L Device:LED D?
+U 1 1 5CD28667
+P 7150 3400
+F 0 "D?" V 7189 3283 50  0000 R CNN
+F 1 "LED" V 7098 3283 50  0000 R CNN
+F 2 "LED_SMD:LED_1206_3216Metric" H 7150 3400 50  0001 C CNN
+F 3 "~" H 7150 3400 50  0001 C CNN
+	1    7150 3400
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	7150 4100 7150 4000
+Wire Wire Line
+	7150 3150 7150 3250
+Wire Wire Line
+	7150 3550 7150 3700
+$Comp
+L Device:R R?
+U 1 1 5CD28670
+P 7150 3850
+F 0 "R?" H 7220 3896 50  0000 L CNN
+F 1 "330" H 7220 3805 50  0000 L CNN
+F 2 "Resistor_SMD:R_1206_3216Metric" V 7080 3850 50  0001 C CNN
+F 3 "~" H 7150 3850 50  0001 C CNN
+	1    7150 3850
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 5CD28676
+P 7150 4100
+F 0 "#PWR?" H 7150 3850 50  0001 C CNN
+F 1 "GND" H 7155 3927 50  0000 C CNN
+F 2 "" H 7150 4100 50  0001 C CNN
+F 3 "" H 7150 4100 50  0001 C CNN
+	1    7150 4100
+	1    0    0    -1  
+$EndComp
+Text Label 6750 3150 0    50   ~ 0
+LED3
+$Comp
+L Device:LED D?
+U 1 1 5CD300EB
+P 6750 3400
+F 0 "D?" V 6789 3283 50  0000 R CNN
+F 1 "LED" V 6698 3283 50  0000 R CNN
+F 2 "LED_SMD:LED_1206_3216Metric" H 6750 3400 50  0001 C CNN
+F 3 "~" H 6750 3400 50  0001 C CNN
+	1    6750 3400
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	6750 4100 6750 4000
+Wire Wire Line
+	6750 3150 6750 3250
+Wire Wire Line
+	6750 3550 6750 3700
+$Comp
+L Device:R R?
+U 1 1 5CD300F4
+P 6750 3850
+F 0 "R?" H 6820 3896 50  0000 L CNN
+F 1 "330" H 6820 3805 50  0000 L CNN
+F 2 "Resistor_SMD:R_1206_3216Metric" V 6680 3850 50  0001 C CNN
+F 3 "~" H 6750 3850 50  0001 C CNN
+	1    6750 3850
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 5CD300FA
+P 6750 4100
+F 0 "#PWR?" H 6750 3850 50  0001 C CNN
+F 1 "GND" H 6755 3927 50  0000 C CNN
+F 2 "" H 6750 4100 50  0001 C CNN
+F 3 "" H 6750 4100 50  0001 C CNN
+	1    6750 4100
+	1    0    0    -1  
+$EndComp
+Wire Notes Line
+	6650 4350 6650 3050
+Wire Notes Line
+	6650 4350 7850 4350
+Wire Notes Line
+	6650 3050 7850 3050
 $EndSCHEMATC

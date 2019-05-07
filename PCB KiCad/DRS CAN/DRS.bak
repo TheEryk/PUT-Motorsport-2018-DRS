@@ -37,8 +37,6 @@ F 3 "" H 10950 2100 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	10450 1800 10950 1800
-Wire Wire Line
 	10450 2100 10950 2100
 $Comp
 L Device:L L3
@@ -843,9 +841,9 @@ Wire Wire Line
 Connection ~ 2900 5800
 Wire Wire Line
 	2900 5800 2950 5800
-Text Label 10450 2000 0    50   ~ 0
-CANH
 Text Label 10450 1900 0    50   ~ 0
+CANH
+Text Label 10450 1800 0    50   ~ 0
 CANL
 Wire Wire Line
 	7350 5000 7750 5000
@@ -1172,4 +1170,20 @@ F 3 "" H 10500 1000 50  0001 C CNN
 	1    10500 1000
 	0    -1   -1   0   
 $EndComp
+$Comp
+L power:+12V #PWR0121
+U 1 1 5CD290AD
+P 10950 1800
+F 0 "#PWR0121" H 10950 1650 50  0001 C CNN
+F 1 "+12V" H 10965 1973 50  0000 C CNN
+F 2 "" H 10950 1800 50  0001 C CNN
+F 3 "" H 10950 1800 50  0001 C CNN
+	1    10950 1800
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	10950 1800 10950 2000
+Wire Wire Line
+	10950 2000 10450 2000
+Connection ~ 10950 1800
 $EndSCHEMATC
