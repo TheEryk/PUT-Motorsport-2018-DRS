@@ -42,7 +42,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-#include <util/delay.h>
+#include <util/delay_basic.h>
 
 //#include "config.h"
 
@@ -139,13 +139,13 @@ static inline uint8_t read_and_replace_atomar(volatile uint8_t *data, uint8_t ne
 {
 	uint8_t old_data;
 	
-	ENTER_CRITICAL_SECTION
+//	ENTER_CRITICAL_SECTION
 	
 	// Daten tauschen
 	old_data = *data;
 	*data = new_data;
 	
-	LEAVE_CRITICAL_SECTION
+//	LEAVE_CRITICAL_SECTION
 	
 	return old_data;
 }

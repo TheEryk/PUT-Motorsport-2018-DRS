@@ -64,7 +64,7 @@
 #include "can_config.h"
 #else
 /* try to load config.h - compatibility */
-#include "config.h"
+#include "my_config.h"
 #endif
 #endif
 
@@ -281,8 +281,7 @@ typedef enum {
  * \return	false falls das CAN Interface nicht initialisiert werden konnte,
  *			true ansonsten.
  */
-extern bool
-can_init(can_bitrate_t bitrate);
+//extern bool can_init(can_bitrate_t bitrate);
 
 // ----------------------------------------------------------------------------
 /**
