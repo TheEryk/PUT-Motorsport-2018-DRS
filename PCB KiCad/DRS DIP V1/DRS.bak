@@ -118,17 +118,6 @@ F 3 "~" H 10250 4950 50  0001 C CNN
 	1    10250 4950
 	1    0    0    -1  
 $EndComp
-$Comp
-L Device:R R7
-U 1 1 5CB17D59
-P 10250 5450
-F 0 "R7" H 10320 5496 50  0000 L CNN
-F 1 "R" H 10320 5405 50  0000 L CNN
-F 2 "Resistor_SMD:R_1206_3216Metric" V 10180 5450 50  0001 C CNN
-F 3 "~" H 10250 5450 50  0001 C CNN
-	1    10250 5450
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	8050 5000 7750 5000
 Wire Wire Line
@@ -145,15 +134,8 @@ Wire Wire Line
 Wire Wire Line
 	10650 6150 10650 6050
 Wire Wire Line
-	10250 5600 10250 6150
-Connection ~ 10250 6150
-Wire Wire Line
-	10250 6150 10650 6150
-Wire Wire Line
 	9900 5600 9900 6150
 Connection ~ 9900 6150
-Wire Wire Line
-	9900 6150 10250 6150
 Wire Wire Line
 	9200 5600 9200 6150
 Connection ~ 9200 6150
@@ -183,8 +165,6 @@ Wire Wire Line
 	9900 5200 9900 5100
 Wire Wire Line
 	9900 5200 10250 5200
-Wire Wire Line
-	10250 5200 10250 5300
 Wire Wire Line
 	10250 5200 10250 5100
 Connection ~ 10250 5200
@@ -756,11 +736,6 @@ Wire Wire Line
 Wire Wire Line
 	2850 1600 2850 1650
 Wire Wire Line
-	2850 1250 3150 1250
-Wire Wire Line
-	3150 1250 3150 1300
-Connection ~ 2850 1250
-Wire Wire Line
 	3150 1600 3150 1650
 Wire Wire Line
 	3150 1650 2850 1650
@@ -822,17 +797,6 @@ F 3 "~" H 10250 2900 50  0001 C CNN
 	1    10250 2900
 	1    0    0    -1  
 $EndComp
-$Comp
-L Device:R R5
-U 1 1 5CBDC818
-P 10250 3400
-F 0 "R5" H 10320 3446 50  0000 L CNN
-F 1 "R" H 10320 3355 50  0000 L CNN
-F 2 "Resistor_SMD:R_1206_3216Metric" V 10180 3400 50  0001 C CNN
-F 3 "~" H 10250 3400 50  0001 C CNN
-	1    10250 3400
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	8050 2950 7750 2950
 Wire Wire Line
@@ -849,15 +813,8 @@ Wire Wire Line
 Wire Wire Line
 	10650 4100 10650 4000
 Wire Wire Line
-	10250 3550 10250 4100
-Connection ~ 10250 4100
-Wire Wire Line
-	10250 4100 10650 4100
-Wire Wire Line
 	9900 3550 9900 4100
 Connection ~ 9900 4100
-Wire Wire Line
-	9900 4100 10250 4100
 Wire Wire Line
 	9200 3550 9200 4100
 Connection ~ 9200 4100
@@ -887,8 +844,6 @@ Wire Wire Line
 	9900 3150 9900 3050
 Wire Wire Line
 	9900 3150 10250 3150
-Wire Wire Line
-	10250 3150 10250 3250
 Wire Wire Line
 	10250 3150 10250 3050
 Connection ~ 10250 3150
@@ -1686,4 +1641,77 @@ F 3 "" H 5100 5600 50  0001 C CNN
 	1    5100 5600
 	1    0    0    -1  
 $EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 5CC04586
+P 3150 1200
+F 0 "#PWR?" H 3150 950 50  0001 C CNN
+F 1 "GND" H 3155 1027 50  0000 C CNN
+F 2 "" H 3150 1200 50  0001 C CNN
+F 3 "" H 3150 1200 50  0001 C CNN
+	1    3150 1200
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	3150 1300 3150 1200
+Wire Wire Line
+	9900 4100 10650 4100
+Wire Wire Line
+	9900 6150 10650 6150
+$Comp
+L Device:R R?
+U 1 1 5CDC011C
+P 9500 4650
+F 0 "R?" H 9570 4696 50  0000 L CNN
+F 1 "R" H 9570 4605 50  0000 L CNN
+F 2 "Resistor_SMD:R_1206_3216Metric" V 9430 4650 50  0001 C CNN
+F 3 "~" H 9500 4650 50  0001 C CNN
+	1    9500 4650
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5CDC1FC1
+P 9500 2650
+F 0 "R?" H 9570 2696 50  0000 L CNN
+F 1 "R" H 9570 2605 50  0000 L CNN
+F 2 "Resistor_SMD:R_1206_3216Metric" V 9430 2650 50  0001 C CNN
+F 3 "~" H 9500 2650 50  0001 C CNN
+	1    9500 2650
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	9650 2650 9900 2650
+Wire Wire Line
+	9900 2650 9900 2700
+Wire Wire Line
+	9650 4650 9900 4650
+Wire Wire Line
+	9900 4650 9900 4750
+$Comp
+L power:GND #PWR?
+U 1 1 5CDDB30F
+P 9100 4650
+F 0 "#PWR?" H 9100 4400 50  0001 C CNN
+F 1 "GND" H 9105 4477 50  0000 C CNN
+F 2 "" H 9100 4650 50  0001 C CNN
+F 3 "" H 9100 4650 50  0001 C CNN
+	1    9100 4650
+	0    1    1    0   
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 5CDDC381
+P 9100 2650
+F 0 "#PWR?" H 9100 2400 50  0001 C CNN
+F 1 "GND" H 9105 2477 50  0000 C CNN
+F 2 "" H 9100 2650 50  0001 C CNN
+F 3 "" H 9100 2650 50  0001 C CNN
+	1    9100 2650
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	9100 2650 9350 2650
+Wire Wire Line
+	9100 4650 9350 4650
 $EndSCHEMATC
