@@ -33,7 +33,7 @@
 
 #include <avr/pgmspace.h>
 #include <avr/builtins.h>
-#include <avr/iocan32.h>
+#include <avr/io.h>
 #include "can_buffer.h"
 #include "at90can_disable_dyn_filter.c"
 
