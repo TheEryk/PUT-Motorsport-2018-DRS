@@ -7,6 +7,7 @@
 #include <avr/io.h>
 #ifndef F_CPU
 	#define F_CPU 16000000UL
+	//#define F_CPU 20000000UL // odkomentowac jesli fuse jest ustawiony by dzielic sygnal z kwarcu przez 8
 #endif
 #include <util/delay.h>
 #include <avr/interrupt.h>
@@ -28,13 +29,13 @@ int main (void)
 
 	DDRB   =(1<<PINB1)|(1<<PINB2); //PB1 i PB2 jako wyjœcia
 	TCNT1 = 0;
-	TCCR1A =(1<<COM1A1)|(1<<COM1B1)|(1<<WGM10); //ustawienie FastPWM
+	TCCR1A =(1<<COM1A1)|(1<<COM1B1)|(1<<WGM10); //ustawienie FastPWM w trybie 8-mio bitowym
 	TCCR1B =(1<<WGM12)|(1<<CS10)|(1<<CS11); //preskaler 64
 	TIMSK = 0; // wylaczenie przerwan
 	// 254- pocz¹tek
 	// 55- koniec
 	// 150 stopni obrót
-	
+	OCR1A = 254; // wartoœæ pocz¹tkowa
     while (1)
     {
     	if (KEY_DOWN1)
