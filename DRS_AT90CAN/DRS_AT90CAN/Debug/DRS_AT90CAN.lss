@@ -3,29 +3,29 @@ DRS_AT90CAN.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000006  00800100  00000774  00000808  2**0
+  0 .data         00000006  00800100  0000082a  000008be  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         00000774  00000000  00000000  00000094  2**1
+  1 .text         0000082a  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          0000012d  00800106  00800106  0000080e  2**0
+  2 .bss          0000012d  00800106  00800106  000008c4  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  0000080e  2**0
+  3 .comment      00000030  00000000  00000000  000008c4  2**0
                   CONTENTS, READONLY
-  4 .debug_aranges 00000190  00000000  00000000  0000083e  2**0
+  4 .debug_aranges 000001b0  00000000  00000000  000008f4  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_info   000018d6  00000000  00000000  000009ce  2**0
+  5 .debug_info   00001924  00000000  00000000  00000aa4  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_abbrev 00000c9a  00000000  00000000  000022a4  2**0
+  6 .debug_abbrev 00000c96  00000000  00000000  000023c8  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_line   00000b37  00000000  00000000  00002f3e  2**0
+  7 .debug_line   00000b93  00000000  00000000  0000305e  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_frame  000002f8  00000000  00000000  00003a78  2**2
+  8 .debug_frame  00000338  00000000  00000000  00003bf4  2**2
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    00000578  00000000  00000000  00003d70  2**0
+  9 .debug_str    000005b8  00000000  00000000  00003f2c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    00000be7  00000000  00000000  000042e8  2**0
+ 10 .debug_loc    00000be7  00000000  00000000  000044e4  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_ranges 00000100  00000000  00000000  00004ecf  2**0
+ 11 .debug_ranges 00000120  00000000  00000000  000050cb  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -95,8 +95,8 @@ Disassembly of section .text:
   b8:	11 e0       	ldi	r17, 0x01	; 1
   ba:	a0 e0       	ldi	r26, 0x00	; 0
   bc:	b1 e0       	ldi	r27, 0x01	; 1
-  be:	e4 e7       	ldi	r30, 0x74	; 116
-  c0:	f7 e0       	ldi	r31, 0x07	; 7
+  be:	ea e2       	ldi	r30, 0x2A	; 42
+  c0:	f8 e0       	ldi	r31, 0x08	; 8
   c2:	02 c0       	rjmp	.+4      	; 0xc8 <__do_copy_data+0x10>
   c4:	05 90       	lpm	r0, Z+
   c6:	0d 92       	st	X+, r0
@@ -117,8 +117,8 @@ Disassembly of section .text:
   d8:	a3 33       	cpi	r26, 0x33	; 51
   da:	b2 07       	cpc	r27, r18
   dc:	e1 f7       	brne	.-8      	; 0xd6 <.do_clear_bss_loop>
-  de:	0e 94 8b 03 	call	0x716	; 0x716 <main>
-  e2:	0c 94 b8 03 	jmp	0x770	; 0x770 <_exit>
+  de:	0e 94 d4 03 	call	0x7a8	; 0x7a8 <main>
+  e2:	0c 94 13 04 	jmp	0x826	; 0x826 <_exit>
 
 000000e6 <__bad_interrupt>:
   e6:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -1564,94 +1564,204 @@ static __inline__ void __iRestore(const  uint8_t *__s)
     __asm__ volatile ("" ::: "memory");
  714:	08 95       	ret
 
-00000716 <main>:
-#include <avr/interrupt.h>
+00000716 <DrsInit>:
+#define OCR1B_CLOSE 17700
+#define OCR1B_OPEN 3300
 
-const can_filter_t filtersetup = {0,0,{0}};
+void DrsInit()
+{
+	DDRB |= (1<<DDB5)|(1<<DDB6); //  do koñca nie wiem czy to konieczne
+ 716:	84 b1       	in	r24, 0x04	; 4
+ 718:	80 66       	ori	r24, 0x60	; 96
+ 71a:	84 b9       	out	0x04, r24	; 4
+	
+	TCCR1A = (0b11 & WGM1setting)|(1<<COM1A1);
+ 71c:	82 e8       	ldi	r24, 0x82	; 130
+ 71e:	80 93 80 00 	sts	0x0080, r24
+	TCCR1B = 0b11000 & (WGM1setting << 3);
+ 722:	e1 e8       	ldi	r30, 0x81	; 129
+ 724:	f0 e0       	ldi	r31, 0x00	; 0
+ 726:	80 e1       	ldi	r24, 0x10	; 16
+ 728:	80 83       	st	Z, r24
+	TCCR1C = 0;
+ 72a:	10 92 82 00 	sts	0x0082, r1
+	TIMSK1 = 0;
+ 72e:	10 92 6f 00 	sts	0x006F, r1
+	
+	TCNT1 = 0;
+ 732:	10 92 85 00 	sts	0x0085, r1
+ 736:	10 92 84 00 	sts	0x0084, r1
+	ICR1 = ICR1_TOP;
+ 73a:	8f e1       	ldi	r24, 0x1F	; 31
+ 73c:	9e e4       	ldi	r25, 0x4E	; 78
+ 73e:	90 93 87 00 	sts	0x0087, r25
+ 742:	80 93 86 00 	sts	0x0086, r24
+	OCR1A = OCR1A_CLOSE;
+ 746:	84 ee       	ldi	r24, 0xE4	; 228
+ 748:	9c e0       	ldi	r25, 0x0C	; 12
+ 74a:	90 93 89 00 	sts	0x0089, r25
+ 74e:	80 93 88 00 	sts	0x0088, r24
+	OCR1B = OCR1B_CLOSE;
+ 752:	84 e2       	ldi	r24, 0x24	; 36
+ 754:	95 e4       	ldi	r25, 0x45	; 69
+ 756:	90 93 8b 00 	sts	0x008B, r25
+ 75a:	80 93 8a 00 	sts	0x008A, r24
+	
+	// start
+	TCCR1B |= PRESCALER_1;
+ 75e:	80 81       	ld	r24, Z
+ 760:	81 60       	ori	r24, 0x01	; 1
+ 762:	80 83       	st	Z, r24
+ 764:	08 95       	ret
+
+00000766 <DrsOpen>:
+}
+
+void DrsOpen()
+{
+	OCR1A = OCR1A_OPEN;
+ 766:	84 e2       	ldi	r24, 0x24	; 36
+ 768:	95 e4       	ldi	r25, 0x45	; 69
+ 76a:	90 93 89 00 	sts	0x0089, r25
+ 76e:	80 93 88 00 	sts	0x0088, r24
+	OCR1B = OCR1B_OPEN;
+ 772:	84 ee       	ldi	r24, 0xE4	; 228
+ 774:	9c e0       	ldi	r25, 0x0C	; 12
+ 776:	90 93 8b 00 	sts	0x008B, r25
+ 77a:	80 93 8a 00 	sts	0x008A, r24
+ 77e:	08 95       	ret
+
+00000780 <DrsClose>:
+}
+
+void DrsClose()
+{
+	OCR1A = OCR1A_CLOSE;
+ 780:	84 ee       	ldi	r24, 0xE4	; 228
+ 782:	9c e0       	ldi	r25, 0x0C	; 12
+ 784:	90 93 89 00 	sts	0x0089, r25
+ 788:	80 93 88 00 	sts	0x0088, r24
+	OCR1B = OCR1B_CLOSE;
+ 78c:	84 e2       	ldi	r24, 0x24	; 36
+ 78e:	95 e4       	ldi	r25, 0x45	; 69
+ 790:	90 93 8b 00 	sts	0x008B, r25
+ 794:	80 93 8a 00 	sts	0x008A, r24
+ 798:	08 95       	ret
+
+0000079a <LedInit>:
+}
+
+void LedInit()
+{
+	DDRB |= 1<<DDB0 | 1<<DDB2 | 1<<DDB3;
+ 79a:	84 b1       	in	r24, 0x04	; 4
+ 79c:	8d 60       	ori	r24, 0x0D	; 13
+ 79e:	84 b9       	out	0x04, r24	; 4
+	PORTB = ~((~PORTB) | (1<<DDB0 | 1<<DDB2 | 1<<DDB3)); // wyzerowanie odpowiednich bitów
+ 7a0:	85 b1       	in	r24, 0x05	; 5
+ 7a2:	82 7f       	andi	r24, 0xF2	; 242
+ 7a4:	85 b9       	out	0x05, r24	; 5
+ 7a6:	08 95       	ret
+
+000007a8 <main>:
+void DrsClose();
+
+void LedInit();
 
 int main(void)
 {
- 716:	cf 93       	push	r28
- 718:	df 93       	push	r29
- 71a:	cd b7       	in	r28, 0x3d	; 61
- 71c:	de b7       	in	r29, 0x3e	; 62
- 71e:	2c 97       	sbiw	r28, 0x0c	; 12
- 720:	0f b6       	in	r0, 0x3f	; 63
- 722:	f8 94       	cli
- 724:	de bf       	out	0x3e, r29	; 62
- 726:	0f be       	out	0x3f, r0	; 63
- 728:	cd bf       	out	0x3d, r28	; 61
-DDRB |= 1<<DDB0 | 1<<DDB2 | 1<<DDB3;
- 72a:	84 b1       	in	r24, 0x04	; 4
- 72c:	8d 60       	ori	r24, 0x0D	; 13
- 72e:	84 b9       	out	0x04, r24	; 4
-PORTB = 0x00;
- 730:	15 b8       	out	0x05, r1	; 5
+ 7a8:	cf 93       	push	r28
+ 7aa:	df 93       	push	r29
+ 7ac:	cd b7       	in	r28, 0x3d	; 61
+ 7ae:	de b7       	in	r29, 0x3e	; 62
+ 7b0:	2c 97       	sbiw	r28, 0x0c	; 12
+ 7b2:	0f b6       	in	r0, 0x3f	; 63
+ 7b4:	f8 94       	cli
+ 7b6:	de bf       	out	0x3e, r29	; 62
+ 7b8:	0f be       	out	0x3f, r0	; 63
+ 7ba:	cd bf       	out	0x3d, r28	; 61
+	// preskaler zegara cpu na 1
+	asm("ldi r16,0x80");
+ 7bc:	00 e8       	ldi	r16, 0x80	; 128
+	asm("sts 0x61,r16"); //CLKPR
+ 7be:	00 93 61 00 	sts	0x0061, r16
+	asm("sts 0x61,r16"); // CLKPR
+ 7c2:	00 93 61 00 	sts	0x0061, r16
+	
+	LedInit();
+ 7c6:	0e 94 cd 03 	call	0x79a	; 0x79a <LedInit>
+	DrsInit();
+ 7ca:	0e 94 8b 03 	call	0x716	; 0x716 <DrsInit>
 
 	can_init(BITRATE_500_KBPS);
- 732:	86 e0       	ldi	r24, 0x06	; 6
- 734:	0e 94 b9 00 	call	0x172	; 0x172 <can_init>
-	
-	/*filtersetup.flags.rtr = 0;
-	filtersetup.id = 0x00;
-	filtersetup.mask = 0x00;*/
+ 7ce:	86 e0       	ldi	r24, 0x06	; 6
+ 7d0:	0e 94 b9 00 	call	0x172	; 0x172 <can_init>
 	can_set_filter(1, &filtersetup);
- 738:	60 e0       	ldi	r22, 0x00	; 0
- 73a:	71 e0       	ldi	r23, 0x01	; 1
- 73c:	81 e0       	ldi	r24, 0x01	; 1
- 73e:	0e 94 93 02 	call	0x526	; 0x526 <can_set_filter>
-msg.data[1] = 0x02;
-msg.data[2] = 0x03;
+ 7d4:	60 e0       	ldi	r22, 0x00	; 0
+ 7d6:	71 e0       	ldi	r23, 0x01	; 1
+ 7d8:	81 e0       	ldi	r24, 0x01	; 1
+ 7da:	0e 94 93 02 	call	0x526	; 0x526 <can_set_filter>
 msg.data[3] = 0x04;
 
-//can_send_message(&msg);
+//can_send_message(&msg);*/
+
+// odblokowane przerwania dla CANa
 sei();
- 742:	78 94       	sei
-				if(rxmsg.length == 8)
-				{
-					// zapal diode jesli 7bajt jest równy 0xff
-					if(rxmsg.data[6] == 0xff)
-					{
-						PORTB ^= 1<<DDB3;
- 744:	18 e0       	ldi	r17, 0x08	; 8
+ 7de:	78 94       	sei
 can_t rxmsg;
 
     while(1)
     {
         //TODO:: Please write your application code 
 		if(can_check_message())
- 746:	0e 94 81 01 	call	0x302	; 0x302 <can_check_message>
- 74a:	88 23       	and	r24, r24
- 74c:	e1 f3       	breq	.-8      	; 0x746 <main+0x30>
+ 7e0:	0e 94 81 01 	call	0x302	; 0x302 <can_check_message>
+ 7e4:	88 23       	and	r24, r24
+ 7e6:	e1 f3       	breq	.-8      	; 0x7e0 <main+0x38>
 		{
-			PORTB |= 1<<DDB3;
- 74e:	2b 9a       	sbi	0x05, 3	; 5
+			// przykladowa obsluga Cana
+			// ramka o ID = 40, dlugoœci danych 1 bajt,
+			// jesli ten bajt == 0xff to otwórz drs
+			// jesli ten bajt == 0x01 to zamknij drs
 			if(can_get_message(&rxmsg))
- 750:	ce 01       	movw	r24, r28
- 752:	01 96       	adiw	r24, 0x01	; 1
- 754:	0e 94 e5 01 	call	0x3ca	; 0x3ca <can_get_message>
- 758:	88 23       	and	r24, r24
- 75a:	a9 f3       	breq	.-22     	; 0x746 <main+0x30>
+ 7e8:	ce 01       	movw	r24, r28
+ 7ea:	01 96       	adiw	r24, 0x01	; 1
+ 7ec:	0e 94 e5 01 	call	0x3ca	; 0x3ca <can_get_message>
+ 7f0:	88 23       	and	r24, r24
+ 7f2:	b1 f3       	breq	.-20     	; 0x7e0 <main+0x38>
 			{
-				if(rxmsg.length == 8)
- 75c:	8c 81       	ldd	r24, Y+4	; 0x04
- 75e:	88 30       	cpi	r24, 0x08	; 8
- 760:	91 f7       	brne	.-28     	; 0x746 <main+0x30>
+				if(rxmsg.id == 40 && rxmsg.length == 1 && rxmsg.data[0] == 0xff)
+ 7f4:	89 81       	ldd	r24, Y+1	; 0x01
+ 7f6:	9a 81       	ldd	r25, Y+2	; 0x02
+ 7f8:	88 97       	sbiw	r24, 0x28	; 40
+ 7fa:	91 f7       	brne	.-28     	; 0x7e0 <main+0x38>
+ 7fc:	8c 81       	ldd	r24, Y+4	; 0x04
+ 7fe:	81 30       	cpi	r24, 0x01	; 1
+ 800:	79 f7       	brne	.-34     	; 0x7e0 <main+0x38>
+ 802:	8d 81       	ldd	r24, Y+5	; 0x05
+ 804:	8f 3f       	cpi	r24, 0xFF	; 255
+ 806:	49 f4       	brne	.+18     	; 0x81a <main+0x72>
 				{
-					// zapal diode jesli 7bajt jest równy 0xff
-					if(rxmsg.data[6] == 0xff)
- 762:	8b 85       	ldd	r24, Y+11	; 0x0b
- 764:	8f 3f       	cpi	r24, 0xFF	; 255
- 766:	79 f7       	brne	.-34     	; 0x746 <main+0x30>
-					{
-						PORTB ^= 1<<DDB3;
- 768:	85 b1       	in	r24, 0x05	; 5
- 76a:	81 27       	eor	r24, r17
- 76c:	85 b9       	out	0x05, r24	; 5
- 76e:	eb cf       	rjmp	.-42     	; 0x746 <main+0x30>
+					DrsOpen();
+ 808:	0e 94 b3 03 	call	0x766	; 0x766 <DrsOpen>
+				}
+				if(rxmsg.id == 40 && rxmsg.length == 1 && rxmsg.data[0] == 0x01)
+ 80c:	89 81       	ldd	r24, Y+1	; 0x01
+ 80e:	9a 81       	ldd	r25, Y+2	; 0x02
+ 810:	88 97       	sbiw	r24, 0x28	; 40
+ 812:	31 f7       	brne	.-52     	; 0x7e0 <main+0x38>
+ 814:	8c 81       	ldd	r24, Y+4	; 0x04
+ 816:	81 30       	cpi	r24, 0x01	; 1
+ 818:	19 f7       	brne	.-58     	; 0x7e0 <main+0x38>
+ 81a:	8d 81       	ldd	r24, Y+5	; 0x05
+ 81c:	81 30       	cpi	r24, 0x01	; 1
+ 81e:	01 f7       	brne	.-64     	; 0x7e0 <main+0x38>
+				{
+					DrsClose();
+ 820:	0e 94 c0 03 	call	0x780	; 0x780 <DrsClose>
+ 824:	dd cf       	rjmp	.-70     	; 0x7e0 <main+0x38>
 
-00000770 <_exit>:
- 770:	f8 94       	cli
+00000826 <_exit>:
+ 826:	f8 94       	cli
 
-00000772 <__stop_program>:
- 772:	ff cf       	rjmp	.-2      	; 0x772 <__stop_program>
+00000828 <__stop_program>:
+ 828:	ff cf       	rjmp	.-2      	; 0x828 <__stop_program>
