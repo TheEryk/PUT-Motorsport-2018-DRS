@@ -1,6 +1,6 @@
 # Hey Emacs, this is a -*- makefile -*-
 #----------------------------------------------------------------------------
-# WinAVR Makefile Template written by Eric B. Weddington, Jörg Wunsch, et al.
+# WinAVR Makefile Template written by Eric B. Weddington, Jï¿½rg Wunsch, et al.
 #
 # Released to the Public Domain
 #
@@ -41,8 +41,8 @@
 
 
 # MCU name
-MCU = atmega32
-#MCU = at90can128
+#MCU = atmega32
+MCU = at90can32
 
 # Processor frequency.
 #     This will define a symbol, F_CPU, in all source code files equal to the 
@@ -81,22 +81,7 @@ OBJDIR = build
 
 
 # List C source files here. (C dependencies are automatically generated.)
-SRC = mcp2515.c
-SRC += mcp2515_buffer.c
-SRC += mcp2515_get_message.c
-SRC += mcp2515_send_message.c
-SRC += mcp2515_set_dyn_filter.c
-SRC += mcp2515_get_dyn_filter.c
-SRC += mcp2515_static_filter.c
-SRC += mcp2515_write_id.c
-SRC += mcp2515_read_id.c
-SRC += mcp2515_error_register.c
-SRC += mcp2515_regdump.c
-SRC += mcp2515_set_mode.c
-SRC += mcp2515_sleep.c
-SRC += spi.c
-
-SRC += at90can.c
+SRC = at90can.c
 SRC += at90can_buffer.c
 SRC += at90can_disable_dyn_filter.c
 SRC += at90can_set_dyn_filter.c
@@ -107,12 +92,6 @@ SRC += at90can_get_message.c
 SRC += at90can_get_buf_message.c
 SRC += at90can_error_register.c
 SRC += at90can_set_mode.c
-
-SRC += sja1000.c
-SRC += sja1000_buffer.c
-SRC += sja1000_send_message.c
-SRC += sja1000_get_message.c
-SRC += sja1000_error_register.c
 
 SRC += can_buffer.c
 

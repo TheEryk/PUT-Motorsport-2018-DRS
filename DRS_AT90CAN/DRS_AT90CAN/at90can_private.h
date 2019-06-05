@@ -33,6 +33,8 @@
 
 // ----------------------------------------------------------------------------
 
+#define F_CPU 16000000UL
+
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
@@ -49,12 +51,11 @@
 	 defined (__AVR_AT90CAN64__) || \
 	 defined (__AVR_AT90CAN128__)) && \
 	 BUILD_FOR_AT90CAN == 1
-
+//
 
 #if F_CPU != 16000000UL
 	#error	only 16 MHz for F_CPU supported!
 #endif
-
 
 #define	SUPPORT_FOR_AT90CAN__		1
 
@@ -141,9 +142,9 @@ extern __attribute__ ((gnu_inline)) inline void _leave_standby_mode(void)
 {
 	// save CANPAGE register
 	uint8_t canpage = CANPAGE;
-	uint8_t i;
+	
 	// reenable all MObs
-	for (i=0;i<15;i++) {
+	for (uint8_t i=0;i<15;i++) {
 		CANPAGE = i << 4;
 		CANCDMOB = CANCDMOB;
 	}

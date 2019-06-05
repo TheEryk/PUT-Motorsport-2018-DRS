@@ -32,10 +32,7 @@
 #ifdef	SUPPORT_FOR_AT90CAN__
 
 #include <avr/pgmspace.h>
-#include <avr/builtins.h>
-#include <avr/io.h>
 #include "can_buffer.h"
-#include "at90can_disable_dyn_filter.c"
 
 // ----------------------------------------------------------------------------
 
@@ -161,9 +158,9 @@ bool at90can_init(uint8_t bitrate)
 	
 	// set CAN Bit Timing
 	// (see datasheet page 260)
-	CANBT1 = _at90can_cnf[bitrate][0];
-	CANBT2 = _at90can_cnf[bitrate][1];
-	CANBT3 = _at90can_cnf[bitrate][2];
+	CANBT1 = pgm_read_byte(&_at90can_cnf[bitrate][0]);
+	CANBT2 = pgm_read_byte(&_at90can_cnf[bitrate][1]);
+	CANBT3 = pgm_read_byte(&_at90can_cnf[bitrate][2]);
 	
 	// activate CAN transmit- and receive-interrupt
 	CANGIT = 0;

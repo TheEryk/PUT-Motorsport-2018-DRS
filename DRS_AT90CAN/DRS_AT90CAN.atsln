@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Atmel Studio Solution File, Format Version 11.00
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "DRS_AT90CAN", "DRS_AT90CAN\DRS_AT90CAN.cproj", "{C610FC08-A7FF-4E7A-9291-EC272E7ED5FB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|AVR = Debug|AVR
+		Release|AVR = Release|AVR
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C610FC08-A7FF-4E7A-9291-EC272E7ED5FB}.Debug|AVR.ActiveCfg = Debug|AVR
+		{C610FC08-A7FF-4E7A-9291-EC272E7ED5FB}.Debug|AVR.Build.0 = Debug|AVR
+		{C610FC08-A7FF-4E7A-9291-EC272E7ED5FB}.Release|AVR.ActiveCfg = Release|AVR
+		{C610FC08-A7FF-4E7A-9291-EC272E7ED5FB}.Release|AVR.Build.0 = Release|AVR
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
