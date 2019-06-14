@@ -15,11 +15,13 @@
 
 const can_filter_t filtersetup = {0,0,{0}};
 
-void DrsInit();
+void DrsPwmInit();
 void DrsOpen();
 void DrsClose();
 
 void LedInit();
+
+void CanThread();
 
 int main(void)
 {
@@ -29,14 +31,14 @@ int main(void)
 	asm("sts 0x61,r16"); // CLKPR
 	
 	LedInit();
-	DrsInit();
+	//DrsPwmInit();
 
 	can_init(BITRATE_500_KBPS);
 	can_set_filter(1, &filtersetup);
 	
-/*can_t msg;
+can_t msg;
 
-msg.id = 0x1;
+msg.id = 0x22;
 msg.flags.rtr = 0;
 //msg.flags.extended = 0;
 
@@ -46,7 +48,7 @@ msg.data[1] = 0x02;
 msg.data[2] = 0x03;
 msg.data[3] = 0x04;
 
-//can_send_message(&msg);*/
+//can_send_message(&msg);
 
 // odblokowane przerwania dla CANa
 sei();
@@ -56,7 +58,7 @@ can_t rxmsg;
     while(1)
     {
         //TODO:: Please write your application code 
-		if(can_check_message())
+		/*if(can_check_message())
 		{
 			// przykladowa obsluga Cana
 			// ramka o ID = 40, dlugoœci danych 1 bajt,
@@ -73,7 +75,8 @@ can_t rxmsg;
 					DrsClose();
 				}
 			}
-		}
+		}*/
+		CanThread();
 		//
     }
 }
@@ -88,7 +91,7 @@ can_t rxmsg;
 #define OCR1B_CLOSE 17700
 #define OCR1B_OPEN 3300
 
-void DrsInit()
+void DrsPwmInit()
 {
 	DDRB |= (1<<DDB5)|(1<<DDB6); //  do koñca nie wiem czy to konieczne
 	
@@ -122,4 +125,40 @@ void LedInit()
 {
 	DDRB |= 1<<DDB0 | 1<<DDB2 | 1<<DDB3;
 	PORTB = ~((~PORTB) | (1<<DDB0 | 1<<DDB2 | 1<<DDB3)); // wyzerowanie odpowiednich bitów
+}
+
+
+#define FRAME_DRS_SWITCH_ID 0x01
+#define FRAME_DRS_SWITCH_BYTE 6
+#define FRAME_DRS_SWITCH_BIT 4
+
+void CanThread()
+{
+	static can_t rx_message; // received message structure
+	
+	if(can_get_message(&rx_message))
+	{
+		// ramka odebrana
+		if( rx_message.id == FRAME_DRS_SWITCH_ID 
+		&& rx_message.length == 8)
+		{
+			if((rx_message.data[7]>>FRAME_DRS_SWITCH_BIT)&0x01)
+			{
+				// sygna³ otwarcia Drsa 
+				// timestamp
+				PORTB |= 1 << DDB0;
+				PORTB = ~(~(PORTB)|(1<<DDB2));
+			}
+			else
+			{
+				// sygna³ zamkniecia Drsa
+				// timestamp
+				PORTB |= 1 << DDB2;
+				PORTB = ~(~(PORTB)|(1<<DDB0));				
+			} 
+			rx_message.id += 10;
+			can_send_message(&rx_message); // sprawdzone i dzia³a
+		}
+		
+	}
 }
