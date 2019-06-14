@@ -1935,7 +1935,7 @@ void CanThread()
  84c:	0a 96       	adiw	r24, 0x0a	; 10
  84e:	91 83       	std	Z+1, r25	; 0x01
  850:	80 83       	st	Z, r24
-			can_send_message(&rx_message);
+			can_send_message(&rx_message); // sprawdzone i dzia³a
  852:	cf 01       	movw	r24, r30
  854:	0e 94 6c 02 	call	0x4d8	; 0x4d8 <can_send_message>
  858:	08 95       	ret
@@ -1957,8 +1957,8 @@ int main(void)
  864:	0e 94 02 04 	call	0x804	; 0x804 <LedInit>
 	//DrsPwmInit();
 
-	can_init(BITRATE_500_KBPS);
- 868:	86 e0       	ldi	r24, 0x06	; 6
+	can_init(BITRATE_1_MBPS);
+ 868:	87 e0       	ldi	r24, 0x07	; 7
  86a:	0e 94 d9 00 	call	0x1b2	; 0x1b2 <can_init>
 	can_set_filter(1, &filtersetup);
  86e:	60 e0       	ldi	r22, 0x00	; 0

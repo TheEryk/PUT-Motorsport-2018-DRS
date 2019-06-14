@@ -33,7 +33,7 @@ int main(void)
 	LedInit();
 	//DrsPwmInit();
 
-	can_init(BITRATE_500_KBPS);
+	can_init(BITRATE_1_MBPS);
 	can_set_filter(1, &filtersetup);
 	
 can_t msg;
