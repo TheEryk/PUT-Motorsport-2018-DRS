@@ -130,7 +130,7 @@ void LedInit()
 
 #define FRAME_DRS_SWITCH_ID 0x01
 #define FRAME_DRS_SWITCH_BYTE 6
-#define FRAME_DRS_SWITCH_BIT 4
+#define FRAME_DRS_SWITCH_BIT 3
 
 void CanThread()
 {
@@ -156,8 +156,8 @@ void CanThread()
 				PORTB |= 1 << DDB2;
 				PORTB = ~(~(PORTB)|(1<<DDB0));				
 			} 
-			rx_message.id += 10;
-			can_send_message(&rx_message); // sprawdzone i dzia³a
+			//rx_message.id += 10;
+			//can_send_message(&rx_message); // sprawdzone i dzia³a
 		}
 		
 	}
