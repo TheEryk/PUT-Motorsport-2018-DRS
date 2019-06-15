@@ -15,6 +15,41 @@
 
 const can_filter_t filtersetup = {0,0,{0}};
 
+#define DRS_MAX_OPEN_TICKS	1000
+#define TIMER_MAX_VAL		0xFFFFFFFF
+
+//	stan DRSa (otwarty -> 1, zamkniety -> 0)
+uint8_t DRS_state = 0;
+
+//	czy DRS jest umozliwiony (jesli dojdzie do awarii, czyli przepelnienia czasu otworzenia DRSa wylacz mozliwosc ponownego wlaczenia)
+//(dostepny -> 1, niedostepny -> 0)
+uint8_t DRS_available = 1;
+
+//	stan licznika timera
+volatile uint64_t timer_counter = 0;
+
+//	stan licznika timera przy uruchomieniu DRS
+volatile uint64_t DRS_timer_count = 0;
+
+
+/*
+	Przerwanie timer 1{
+		timer_counter++;
+		if(timertimer_counter - DRS_MAX_OPEN_TICKS > DRS_timer_count ){
+			// wyjebka DRSa
+			DRS_available = 0;
+			CrsClose();
+		}
+	}
+*/
+
+/*
+	Przerwanie timer 2{
+		can_send_message(&msg)		//	ze stanem DRSa
+	}
+
+*/
+
 void DrsPwmInit();
 void DrsOpen();
 void DrsClose();
@@ -61,8 +96,8 @@ can_t rxmsg;
 		/*if(can_check_message())
 		{
 			// przykladowa obsluga Cana
-			// ramka o ID = 40, dlugoœci danych 1 bajt,
-			// jesli ten bajt == 0xff to otwórz drs
+			// ramka o ID = 40, dlugoï¿½ci danych 1 bajt,
+			// jesli ten bajt == 0xff to otwï¿½rz drs
 			// jesli ten bajt == 0x01 to zamknij drs
 			if(can_get_message(&rxmsg))
 			{
@@ -93,7 +128,7 @@ can_t rxmsg;
 
 void DrsPwmInit()
 {
-	DDRB |= (1<<DDB5)|(1<<DDB6); //  do koñca nie wiem czy to konieczne
+	DDRB |= (1<<DDB5)|(1<<DDB6); //  do koï¿½ca nie wiem czy to konieczne
 	
 	TCCR1A = (0b11 & WGM1setting)|(1<<COM1A1);
 	TCCR1B = 0b11000 & (WGM1setting << 3);
@@ -124,7 +159,7 @@ void DrsClose()
 void LedInit()
 {
 	DDRB |= 1<<DDB0 | 1<<DDB2 | 1<<DDB3;
-	PORTB = ~((~PORTB) | (1<<DDB0 | 1<<DDB2 | 1<<DDB3)); // wyzerowanie odpowiednich bitów
+	PORTB = ~((~PORTB) | (1<<DDB0 | 1<<DDB2 | 1<<DDB3)); // wyzerowanie odpowiednich bitï¿½w
 }
 
 
@@ -144,21 +179,32 @@ void CanThread()
 		{
 			if((rx_message.data[7]>>FRAME_DRS_SWITCH_BIT)&0x01)
 			{
-				// sygna³ otwarcia Drsa 
+				// sygnaï¿½ otwarcia Drsa 
 				// timestamp
 				PORTB |= 1 << DDB0;
 				PORTB = ~(~(PORTB)|(1<<DDB2));
+				if(DRS_available){
+					DrsOpen();
+					DRS_state = 1;
+					DRS_timer_count = timer_counter;
+				}
 			}
 			else
 			{
-				// sygna³ zamkniecia Drsa
+				// sygnaï¿½ zamkniecia Drsa
 				// timestamp
 				PORTB |= 1 << DDB2;
 				PORTB = ~(~(PORTB)|(1<<DDB0));				
 			} 
 			//rx_message.id += 10;
-			//can_send_message(&rx_message); // sprawdzone i dzia³a
+			//can_send_message(&rx_message); // sprawdzone i dziaï¿½a
 		}
-		
+		/*
+		if(ramka_zamykajaca drs){
+			DrsClose();
+			DRS_state = 0;
+			DRS_timer_count = 0xFFFFFFFF;
+		}
+		*/
 	}
 }
