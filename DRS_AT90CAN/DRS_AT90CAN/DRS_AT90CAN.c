@@ -31,6 +31,8 @@ volatile uint64_t timer_counter = 0;
 //	stan licznika timera przy uruchomieniu DRS
 volatile uint64_t DRS_timer_count = 0;
 
+// trigger wysylania ramki o stanie DRS'a
+volatile uint8_t DRS_state_msg_trig = 0;
 
 /*
 	Przerwanie timer 1{
@@ -42,6 +44,20 @@ volatile uint64_t DRS_timer_count = 0;
 		}
 	}
 */
+ISR(TIMER0_COMP_vect)
+{
+	TCNT0 = 0;
+	timer_counter++;
+	
+	if(timer_counter % 100 == 0) DRS_state_msg_trig = 1;
+	
+	if(timer_counter - DRS_MAX_OPEN_TICKS > DRS_timer_count ){
+		// wyjebka DRSa
+		//DRS_available = 0;
+		LedNumber(5);
+		DrsClose();
+	}
+}
 
 /*
 	Przerwanie timer 2{
@@ -55,6 +71,8 @@ void DrsOpen();
 void DrsClose();
 
 void LedInit();
+void LedNumber( uint8_t num );
+void TickTimerInit();
 
 void CanThread();
 
@@ -66,7 +84,8 @@ int main(void)
 	asm("sts 0x61,r16"); // CLKPR
 	
 	LedInit();
-	//DrsPwmInit();
+	DrsPwmInit();
+	TickTimerInit();
 
 	can_init(BITRATE_1_MBPS);
 	can_set_filter(1, &filtersetup);
@@ -92,27 +111,7 @@ can_t rxmsg;
 
     while(1)
     {
-        //TODO:: Please write your application code 
-		/*if(can_check_message())
-		{
-			// przykladowa obsluga Cana
-			// ramka o ID = 40, dlugo�ci danych 1 bajt,
-			// jesli ten bajt == 0xff to otw�rz drs
-			// jesli ten bajt == 0x01 to zamknij drs
-			if(can_get_message(&rxmsg))
-			{
-				if(rxmsg.id == 40 && rxmsg.length == 1 && rxmsg.data[0] == 0xff)
-				{
-					DrsOpen();
-				}
-				if(rxmsg.id == 40 && rxmsg.length == 1 && rxmsg.data[0] == 0x01)
-				{
-					DrsClose();
-				}
-			}
-		}*/
 		CanThread();
-		//
     }
 }
 
@@ -146,20 +145,43 @@ void DrsPwmInit()
 
 void DrsOpen()
 {
+	if( DRS_state == 1 ) return; // juz otwarte wiec nic nie rob
 	OCR1A = OCR1A_OPEN;
 	OCR1B = OCR1B_OPEN;
+	DRS_state = 1;
 }
 
 void DrsClose()
 {
+	if( DRS_state == 0 ) return; // juz zamkniete wiec nic nie rob
 	OCR1A = OCR1A_CLOSE;
 	OCR1B = OCR1B_CLOSE;
+	DRS_state = 0;
 }
 
 void LedInit()
 {
 	DDRB |= 1<<DDB0 | 1<<DDB2 | 1<<DDB3;
 	PORTB = ~((~PORTB) | (1<<DDB0 | 1<<DDB2 | 1<<DDB3)); // wyzerowanie odpowiednich bit�w
+}
+
+void LedNumber( uint8_t num )
+{
+	num &= 0x111;
+	uint8_t mask = ((num<<1) & 0b1100) | (num & 0b01);
+	PORTB = ~((~PORTB) | mask );
+}
+
+void TickTimerInit(){
+	// fcpu 16 MHz
+	// preskaler 64
+	// comp 249
+	// 16 000 000 / (64 * (249+1)) = 16000 ---> 1ms
+	TCCR0A = 1<<CS1 | 1 << CS0;
+	TCNT0 = 0;
+	OCR0A = 249;
+	TIFR0 = 0b11; // clearing interrupt flags
+	TIMSK0 = 1<<OCIE0A;
 }
 
 
@@ -170,41 +192,50 @@ void LedInit()
 void CanThread()
 {
 	static can_t rx_message; // received message structure
-	
+	static can_t tx_message; 	
 	if(can_get_message(&rx_message))
 	{
-		// ramka odebrana
+		// ramka odebrana hamulca
 		if( rx_message.id == FRAME_DRS_SWITCH_ID 
 		&& rx_message.length == 8)
 		{
 			if((rx_message.data[7]>>FRAME_DRS_SWITCH_BIT)&0x01)
 			{
+				LedNumber(3);
 				// sygna� otwarcia Drsa 
 				// timestamp
-				PORTB |= 1 << DDB0;
-				PORTB = ~(~(PORTB)|(1<<DDB2));
 				if(DRS_available){
 					DrsOpen();
-					DRS_state = 1;
+					//DRS_state = 1;
 					DRS_timer_count = timer_counter;
 				}
 			}
 			else
 			{
+				LedNumber(4);
 				// sygna� zamkniecia Drsa
 				// timestamp
 				PORTB |= 1 << DDB2;
 				PORTB = ~(~(PORTB)|(1<<DDB0));				
 			} 
-			//rx_message.id += 10;
-			//can_send_message(&rx_message); // sprawdzone i dzia�a
+			
+			// sygnal 'hamulca' symulowany przez przycisk na kierownicy
+			if((rx_message.data[7]>>2)&0x01)
+			{
+				LedNumber(7);
+				DrsClose();
+			}
 		}
-		/*
-		if(ramka_zamykajaca drs){
-			DrsClose();
-			DRS_state = 0;
-			DRS_timer_count = 0xFFFFFFFF;
-		}
-		*/
+		
+	}
+	if(DRS_state_msg_trig == 1)
+	{
+		DRS_state_msg_trig = 0;
+		
+		tx_message.id = 0x0D; // 13
+		tx_message.flags.rtr = 0;
+		tx_message.length = 1;
+		tx_message.data[0] = DRS_state;
+		can_send_message(&tx_message);
 	}
 }
