@@ -1,9 +1,9 @@
 /*
- * DRS_AT90CAN.c
- *
- * Created: 2019-05-27 22:01:50
- *  Author: Tomek
- */ 
+* DRS_AT90CAN.c
+*
+* Created: 2019-05-27 22:01:50
+*  Author: Tomek
+*/
 
 
 #include <avr/io.h>
@@ -35,14 +35,14 @@ volatile uint64_t DRS_timer_count = 0;
 volatile uint8_t DRS_state_msg_trig = 0;
 
 /*
-	Przerwanie timer 1{
-		timer_counter++;
-		if(timertimer_counter - DRS_MAX_OPEN_TICKS > DRS_timer_count ){
-			// wyjebka DRSa
-			DRS_available = 0;
-			CrsClose();
-		}
-	}
+Przerwanie timer 1{
+timer_counter++;
+if(timertimer_counter - DRS_MAX_OPEN_TICKS > DRS_timer_count ){
+// wyjebka DRSa
+DRS_available = 0;
+CrsClose();
+}
+}
 */
 ISR(TIMER0_COMP_vect)
 {
@@ -60,9 +60,9 @@ ISR(TIMER0_COMP_vect)
 }
 
 /*
-	Przerwanie timer 2{
-		can_send_message(&msg)		//	ze stanem DRSa
-	}
+Przerwanie timer 2{
+can_send_message(&msg)		//	ze stanem DRSa
+}
 
 */
 
@@ -90,34 +90,34 @@ int main(void)
 	can_init(BITRATE_1_MBPS);
 	can_set_filter(1, &filtersetup);
 	
-can_t msg;
+	can_t msg;
 
-msg.id = 0x22;
-msg.flags.rtr = 0;
-//msg.flags.extended = 0;
+	msg.id = 0x22;
+	msg.flags.rtr = 0;
+	//msg.flags.extended = 0;
 
-msg.length = 4;
-msg.data[0] = 0x01;
-msg.data[1] = 0x02;
-msg.data[2] = 0x03;
-msg.data[3] = 0x04;
+	msg.length = 4;
+	msg.data[0] = 0x01;
+	msg.data[1] = 0x02;
+	msg.data[2] = 0x03;
+	msg.data[3] = 0x04;
 
-//can_send_message(&msg);
+	//can_send_message(&msg);
 
-// odblokowane przerwania dla CANa
-sei();
+	// odblokowane przerwania dla CANa
+	sei();
 
-can_t rxmsg;
+	can_t rxmsg;
 
-    while(1)
-    {
+	while(1)
+	{
 		CanThread();
-    }
+	}
 }
 
 #define WGM1setting 0b1110 // fast PWM, Top ICR1
 #define PRESCALER_1	0b001
-#define ICR1_TOP 19999 // 16 000 000 / 40 000 = 400 Hz kurde przy 40000 200 Hz
+#define ICR1_TOP 48048 // 16 000 000 / 48 048 = 333 Hz
 
 #define OCR1A_CLOSE 3300 // minimum 3300, skrajna pozycja
 #define OCR1A_OPEN 17700 // max 17700, skrajna pozycja
@@ -129,7 +129,7 @@ void DrsPwmInit()
 {
 	DDRB |= (1<<DDB5)|(1<<DDB6); //  do ko�ca nie wiem czy to konieczne
 	
-	TCCR1A = (0b11 & WGM1setting)|(1<<COM1A1);
+	TCCR1A = (0b11 & WGM1setting)|(1<<COM1A1)|(1<<COM1B1);
 	TCCR1B = 0b11000 & (WGM1setting << 3);
 	TCCR1C = 0;
 	TIMSK1 = 0;
@@ -167,9 +167,9 @@ void LedInit()
 
 void LedNumber( uint8_t num )
 {
-	num &= 0x111;
+	/*num &= 0x111;
 	uint8_t mask = ((num<<1) & 0b1100) | (num & 0b01);
-	PORTB = ~((~PORTB) | mask );
+	PORTB = ~((~PORTB) | mask );*/
 }
 
 void TickTimerInit(){
@@ -186,23 +186,27 @@ void TickTimerInit(){
 
 
 #define FRAME_DRS_SWITCH_ID 0x01
-#define FRAME_DRS_SWITCH_BYTE 6
+#define FRAME_DRS_SWITCH_BYTE 7
 #define FRAME_DRS_SWITCH_BIT 3
+
+#define FRAME_BRAKE_ID 0x05 // nie wiem trzeba ustalic
+#define FRAME_BRAKE_BYTE 1 // nie wiem trzeba ustalic
+#define FRAME_BRAKE_BIT 4
 
 void CanThread()
 {
 	static can_t rx_message; // received message structure
-	static can_t tx_message; 	
+	static can_t tx_message;
 	if(can_get_message(&rx_message))
 	{
 		// ramka odebrana hamulca
-		if( rx_message.id == FRAME_DRS_SWITCH_ID 
-		&& rx_message.length == 8)
+		if( rx_message.id == FRAME_DRS_SWITCH_ID && rx_message.length == 8)
 		{
-			if((rx_message.data[7]>>FRAME_DRS_SWITCH_BIT)&0x01)
+			PORTB ^= 1 << DDB2;
+			if((rx_message.data[FRAME_DRS_SWITCH_BYTE]>>FRAME_DRS_SWITCH_BIT)&0x01)
 			{
 				LedNumber(3);
-				// sygna� otwarcia Drsa 
+				// sygna� otwarcia Drsa
 				// timestamp
 				if(DRS_available){
 					DrsOpen();
@@ -214,16 +218,24 @@ void CanThread()
 			{
 				LedNumber(4);
 				// sygna� zamkniecia Drsa
-				// timestamp
-				PORTB |= 1 << DDB2;
-				PORTB = ~(~(PORTB)|(1<<DDB0));				
-			} 
-			
-			// sygnal 'hamulca' symulowany przez przycisk na kierownicy
-			if((rx_message.data[7]>>2)&0x01)
+				// timestamp nie ustawiany, drs zamknie się automatycznie w przerwaniu po ustalonym czasie
+			}
+		}
+		if( rx_message.id == FRAME_BRAKE_ID )
+		{
+			PORTB ^= 1 << DDB0;
+			if((rx_message.data[FRAME_BRAKE_BYTE]>>FRAME_BRAKE_BIT)&0x01 == 1)
 			{
+				DRS_available = 0; // drs not available
 				LedNumber(7);
 				DrsClose();
+				//PORTB = 1 << DDB0;
+			}
+			else
+			{
+				// drs available after braking stop
+				DRS_available = 1;
+				//PORTB = ~((~PORTB)|(1<<DDB0));
 			}
 		}
 		
@@ -232,7 +244,7 @@ void CanThread()
 	{
 		DRS_state_msg_trig = 0;
 		
-		tx_message.id = 0x0D; // 13
+		tx_message.id = 0x0E; // 13
 		tx_message.flags.rtr = 0;
 		tx_message.length = 1;
 		tx_message.data[0] = DRS_state;
