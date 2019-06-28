@@ -185,13 +185,20 @@ void TickTimerInit(){
 }
 
 
-#define FRAME_DRS_SWITCH_ID 0x01
-#define FRAME_DRS_SWITCH_BYTE 7
-#define FRAME_DRS_SWITCH_BIT 3
 
-#define FRAME_BRAKE_ID 0x05 // nie wiem trzeba ustalic
+#define FRAME_DRS_SWITCH_ID   0x01
+#define FRAME_DRS_SWITCH_BYTE 7
+#define FRAME_DRS_SWITCH_BIT  3
+
+// TODO: zaktualizuj ramki hamowania, trzeba zgrać to z EMU
+
+#define FRAME_BRAKE_ID   0x05 // nie wiem trzeba ustalic
 #define FRAME_BRAKE_BYTE 1 // nie wiem trzeba ustalic
-#define FRAME_BRAKE_BIT 4
+#define FRAME_BRAKE_BIT  4 // nie wiem trzeba ustalic
+
+#define FRAME_DRS_STATUS_ID   0x0E
+#define FRAME_DRS_STATUS_BYTE 0 // nie można zmienić, tylko informacyjny
+#define FRAME_DRS_STATUS_BIT  0
 
 void CanThread()
 {
@@ -202,40 +209,32 @@ void CanThread()
 		// ramka odebrana hamulca
 		if( rx_message.id == FRAME_DRS_SWITCH_ID && rx_message.length == 8)
 		{
-			PORTB ^= 1 << DDB2;
 			if((rx_message.data[FRAME_DRS_SWITCH_BYTE]>>FRAME_DRS_SWITCH_BIT)&0x01)
 			{
-				LedNumber(3);
 				// sygna� otwarcia Drsa
 				// timestamp
 				if(DRS_available){
 					DrsOpen();
-					//DRS_state = 1;
 					DRS_timer_count = timer_counter;
 				}
 			}
 			else
 			{
-				LedNumber(4);
 				// sygna� zamkniecia Drsa
 				// timestamp nie ustawiany, drs zamknie się automatycznie w przerwaniu po ustalonym czasie
 			}
 		}
 		if( rx_message.id == FRAME_BRAKE_ID )
 		{
-			PORTB ^= 1 << DDB0;
 			if((rx_message.data[FRAME_BRAKE_BYTE]>>FRAME_BRAKE_BIT)&0x01 == 1)
 			{
 				DRS_available = 0; // drs not available
-				LedNumber(7);
 				DrsClose();
-				//PORTB = 1 << DDB0;
 			}
 			else
 			{
 				// drs available after braking stop
 				DRS_available = 1;
-				//PORTB = ~((~PORTB)|(1<<DDB0));
 			}
 		}
 		
@@ -244,10 +243,10 @@ void CanThread()
 	{
 		DRS_state_msg_trig = 0;
 		
-		tx_message.id = 0x0E; // 13
+		tx_message.id = FRAME_DRS_STATUS_ID; // 13
 		tx_message.flags.rtr = 0;
 		tx_message.length = 1;
-		tx_message.data[0] = DRS_state;
+		tx_message.data[0] = (DRS_state&0x01)<<FRAME_DRS_STATUS_BIT;
 		can_send_message(&tx_message);
 	}
 }
