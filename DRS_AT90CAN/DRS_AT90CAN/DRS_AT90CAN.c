@@ -190,11 +190,9 @@ void TickTimerInit(){
 #define FRAME_DRS_SWITCH_BYTE 7
 #define FRAME_DRS_SWITCH_BIT  3
 
-// TODO: zaktualizuj ramki hamowania, trzeba zgrać to z EMU
-
-#define FRAME_BRAKE_ID   0x05 // nie wiem trzeba ustalic
-#define FRAME_BRAKE_BYTE 1 // nie wiem trzeba ustalic
-#define FRAME_BRAKE_BIT  4 // nie wiem trzeba ustalic
+#define FRAME_BRAKE_ID   0x01
+#define FRAME_BRAKE_BYTE 7
+#define FRAME_BRAKE_BIT  0
 
 #define FRAME_DRS_STATUS_ID   0x0E
 #define FRAME_DRS_STATUS_BYTE 0 // nie można zmienić, tylko informacyjny
