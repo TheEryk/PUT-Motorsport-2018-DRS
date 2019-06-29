@@ -15,7 +15,7 @@
 
 const can_filter_t filtersetup = {0,0,{0}};
 
-#define DRS_MAX_OPEN_TICKS	1000
+#define DRS_MAX_OPEN_TICKS	200
 #define TIMER_MAX_VAL		0xFFFFFFFF
 
 //	stan DRSa (otwarty -> 1, zamkniety -> 0)
@@ -194,7 +194,7 @@ void TickTimerInit(){
 #define FRAME_BRAKE_BYTE 7
 #define FRAME_BRAKE_BIT  0
 
-#define FRAME_DRS_STATUS_ID   0x0E
+#define FRAME_DRS_STATUS_ID   0x00
 #define FRAME_DRS_STATUS_BYTE 0 // nie można zmienić, tylko informacyjny
 #define FRAME_DRS_STATUS_BIT  0
 
