@@ -21,6 +21,9 @@ const can_filter_t filtersetup = {0,0,{0}};
 //	stan DRSa (otwarty -> 1, zamkniety -> 0)
 uint8_t DRS_state = 0;
 
+// flaga problemu z canem gdy nie otrzyma ramki w odpowiednim czasie
+uint8_t CAN_frame_timeout_flag = 0;
+
 //	czy DRS jest umozliwiony (jesli dojdzie do awarii, czyli przepelnienia czasu otworzenia DRSa wylacz mozliwosc ponownego wlaczenia)
 //(dostepny -> 1, niedostepny -> 0)
 uint8_t DRS_available = 1;
@@ -46,15 +49,23 @@ CrsClose();
 */
 ISR(TIMER0_COMP_vect)
 {
+	static uint64_t DRS_state_msg_next_tick = 100;
 	TCNT0 = 0;
 	timer_counter++;
 	
-	if(timer_counter % 100 == 0) DRS_state_msg_trig = 1;
+	// old timer_counter % 100 == 0
+	// trigger wysylania ramki can ze statusem drsu dla aima
+	if(timer_counter >= DRS_state_msg_next_tick )
+	{
+		DRS_state_msg_next_tick += 100;
+		DRS_state_msg_trig = 1;
+	}
 	
+	// jesli uplynie czas odświeżenia wiadomości CAN to zamknij DRS
 	if(timer_counter - DRS_MAX_OPEN_TICKS > DRS_timer_count ){
 		// wyjebka DRSa
 		//DRS_available = 0;
-		LedNumber(5);
+		CAN_frame_timeout_flag = 1;
 		DrsClose();
 	}
 }
@@ -71,7 +82,7 @@ void DrsOpen();
 void DrsClose();
 
 void LedInit();
-void LedNumber( uint8_t num );
+void LedThread();
 void TickTimerInit();
 
 void CanThread();
@@ -112,6 +123,7 @@ int main(void)
 	while(1)
 	{
 		CanThread();
+		LedThread();
 	}
 }
 
@@ -165,11 +177,14 @@ void LedInit()
 	PORTB = ~((~PORTB) | (1<<DDB0 | 1<<DDB2 | 1<<DDB3)); // wyzerowanie odpowiednich bit�w
 }
 
-void LedNumber( uint8_t num )
+void LedThread( uint8_t num )
 {
-	/*num &= 0x111;
-	uint8_t mask = ((num<<1) & 0b1100) | (num & 0b01);
-	PORTB = ~((~PORTB) | mask );*/
+	// DDB0 status DRS
+	if(DRS_state == 1) PORTB |= 1<<DDB0;
+	else PORTB = ~((~PORTB)|(1<<DDB0));
+	// DDB2 can frame problem
+	if(CAN_frame_timeout_flag == 1) PORTB |= 1<<DDB2;
+	else PORTB = ~((~PORTB)|(1<<DDB2));
 }
 
 void TickTimerInit(){
@@ -220,6 +235,8 @@ void CanThread()
 			{
 				// sygna� zamkniecia Drsa
 				// timestamp nie ustawiany, drs zamknie się automatycznie w przerwaniu po ustalonym czasie
+				DrsClose();
+				DRS_timer_count = timer_counter;
 			}
 		}
 		if( rx_message.id == FRAME_BRAKE_ID )
