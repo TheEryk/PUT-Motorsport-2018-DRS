@@ -131,11 +131,11 @@ int main(void)
 #define PRESCALER_1	0b001
 #define ICR1_TOP 48048 // 16 000 000 / 48 048 = 333 Hz
 
-#define OCR1A_CLOSE 3300 // minimum 3300, skrajna pozycja
-#define OCR1A_OPEN 17700 // max 17700, skrajna pozycja
+#define OCR1A_CLOSE 5400 // minimum 3300, skrajna pozycja
+#define OCR1A_OPEN 11000 // max 17700, skrajna pozycja
 
-#define OCR1B_CLOSE 17700
-#define OCR1B_OPEN 3300
+#define OCR1B_CLOSE 11000
+#define OCR1B_OPEN 5400
 
 void DrsPwmInit()
 {
@@ -203,7 +203,7 @@ void TickTimerInit(){
 
 #define FRAME_DRS_SWITCH_ID   0x01
 #define FRAME_DRS_SWITCH_BYTE 7
-#define FRAME_DRS_SWITCH_BIT  3
+#define FRAME_DRS_SWITCH_BIT  2
 
 #define FRAME_BRAKE_ID   0x01
 #define FRAME_BRAKE_BYTE 7
