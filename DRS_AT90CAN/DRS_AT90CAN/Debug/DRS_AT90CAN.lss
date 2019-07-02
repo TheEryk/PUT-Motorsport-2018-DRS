@@ -3,29 +3,29 @@ DRS_AT90CAN.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         0000000e  00800100  00000b9e  00000c32  2**0
+  0 .data         0000000e  00800100  00000c12  00000ca6  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         00000b9e  00000000  00000000  00000094  2**1
+  1 .text         00000c12  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          00000157  0080010e  0080010e  00000c40  2**0
+  2 .bss          00000158  0080010e  0080010e  00000cb4  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  00000c40  2**0
+  3 .comment      00000030  00000000  00000000  00000cb4  2**0
                   CONTENTS, READONLY
-  4 .debug_aranges 000001c8  00000000  00000000  00000c70  2**0
+  4 .debug_aranges 000001c8  00000000  00000000  00000ce4  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_info   00001bc1  00000000  00000000  00000e38  2**0
+  5 .debug_info   00001b85  00000000  00000000  00000eac  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_abbrev 00000df3  00000000  00000000  000029f9  2**0
+  6 .debug_abbrev 00000dae  00000000  00000000  00002a31  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_line   00000c91  00000000  00000000  000037ec  2**0
+  7 .debug_line   00000cae  00000000  00000000  000037df  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_frame  000003ec  00000000  00000000  00004480  2**2
+  8 .debug_frame  000003ec  00000000  00000000  00004490  2**2
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    0000065f  00000000  00000000  0000486c  2**0
+  9 .debug_str    00000670  00000000  00000000  0000487c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    00000e3f  00000000  00000000  00004ecb  2**0
+ 10 .debug_loc    00000e3f  00000000  00000000  00004eec  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_ranges 00000168  00000000  00000000  00005d0a  2**0
+ 11 .debug_ranges 00000168  00000000  00000000  00005d2b  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -95,8 +95,8 @@ Disassembly of section .text:
   b8:	11 e0       	ldi	r17, 0x01	; 1
   ba:	a0 e0       	ldi	r26, 0x00	; 0
   bc:	b1 e0       	ldi	r27, 0x01	; 1
-  be:	ee e9       	ldi	r30, 0x9E	; 158
-  c0:	fb e0       	ldi	r31, 0x0B	; 11
+  be:	e2 e1       	ldi	r30, 0x12	; 18
+  c0:	fc e0       	ldi	r31, 0x0C	; 12
   c2:	02 c0       	rjmp	.+4      	; 0xc8 <__do_copy_data+0x10>
   c4:	05 90       	lpm	r0, Z+
   c6:	0d 92       	st	X+, r0
@@ -114,11 +114,11 @@ Disassembly of section .text:
   d6:	1d 92       	st	X+, r1
 
 000000d8 <.do_clear_bss_start>:
-  d8:	a5 36       	cpi	r26, 0x65	; 101
+  d8:	a6 36       	cpi	r26, 0x66	; 102
   da:	b2 07       	cpc	r27, r18
   dc:	e1 f7       	brne	.-8      	; 0xd6 <.do_clear_bss_loop>
-  de:	0e 94 a1 05 	call	0xb42	; 0xb42 <main>
-  e2:	0c 94 cd 05 	jmp	0xb9a	; 0xb9a <_exit>
+  de:	0e 94 d9 05 	call	0xbb2	; 0xbb2 <main>
+  e2:	0c 94 07 06 	jmp	0xc0e	; 0xc0e <_exit>
 
 000000e6 <__bad_interrupt>:
   e6:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -378,20 +378,20 @@ bool at90can_init(uint8_t bitrate)
 	
 	#if CAN_RX_BUFFER_SIZE > 0
 	can_buffer_init( &can_rx_buffer, CAN_RX_BUFFER_SIZE, can_rx_list );
- 218:	4f e9       	ldi	r20, 0x9F	; 159
+ 218:	40 ea       	ldi	r20, 0xA0	; 160
  21a:	51 e0       	ldi	r21, 0x01	; 1
  21c:	60 e1       	ldi	r22, 0x10	; 16
- 21e:	8f e5       	ldi	r24, 0x5F	; 95
+ 21e:	80 e6       	ldi	r24, 0x60	; 96
  220:	92 e0       	ldi	r25, 0x02	; 2
  222:	0e 94 8d 03 	call	0x71a	; 0x71a <can_buffer_init>
 	#endif
 	
 	#if CAN_TX_BUFFER_SIZE > 0
 	can_buffer_init( &can_tx_buffer, CAN_TX_BUFFER_SIZE, can_tx_list );
- 226:	49 e3       	ldi	r20, 0x39	; 57
+ 226:	4a e3       	ldi	r20, 0x3A	; 58
  228:	51 e0       	ldi	r21, 0x01	; 1
  22a:	68 e0       	ldi	r22, 0x08	; 8
- 22c:	89 e9       	ldi	r24, 0x99	; 153
+ 22c:	8a e9       	ldi	r24, 0x9A	; 154
  22e:	91 e0       	ldi	r25, 0x01	; 1
  230:	0e 94 8d 03 	call	0x71a	; 0x71a <can_buffer_init>
 	#endif
@@ -488,7 +488,7 @@ ISR(CANIT_vect)
 			
 			#if CAN_TX_BUFFER_SIZE > 0
 			can_t *buf = can_buffer_get_dequeue_ptr(&can_tx_buffer);
- 29a:	89 e9       	ldi	r24, 0x99	; 153
+ 29a:	8a e9       	ldi	r24, 0x9A	; 154
  29c:	91 e0       	ldi	r25, 0x01	; 1
  29e:	0e 94 d7 03 	call	0x7ae	; 0x7ae <can_buffer_get_dequeue_ptr>
 			
@@ -500,7 +500,7 @@ ISR(CANIT_vect)
 				at90can_copy_message_to_mob( buf );
  2a6:	0e 94 a0 02 	call	0x540	; 0x540 <at90can_copy_message_to_mob>
 				can_buffer_dequeue(&can_tx_buffer);
- 2aa:	89 e9       	ldi	r24, 0x99	; 153
+ 2aa:	8a e9       	ldi	r24, 0x9A	; 154
  2ac:	91 e0       	ldi	r25, 0x01	; 1
  2ae:	0e 94 f3 03 	call	0x7e6	; 0x7e6 <can_buffer_dequeue>
 				
@@ -529,7 +529,7 @@ ISR(CANIT_vect)
 			// a message was received successfully
 			#if CAN_RX_BUFFER_SIZE > 0
 			can_t *buf = can_buffer_get_enqueue_ptr(&can_rx_buffer);
- 2ce:	8f e5       	ldi	r24, 0x5F	; 95
+ 2ce:	80 e6       	ldi	r24, 0x60	; 96
  2d0:	92 e0       	ldi	r25, 0x02	; 2
  2d2:	0e 94 ac 03 	call	0x758	; 0x758 <can_buffer_get_enqueue_ptr>
 			
@@ -543,7 +543,7 @@ ISR(CANIT_vect)
 				
 				// push it to the list
 				can_buffer_enqueue(&can_rx_buffer);
- 2de:	8f e5       	ldi	r24, 0x5F	; 95
+ 2de:	80 e6       	ldi	r24, 0x60	; 96
  2e0:	92 e0       	ldi	r25, 0x02	; 2
  2e2:	0e 94 c8 03 	call	0x790	; 0x790 <can_buffer_enqueue>
 				// buffer overflow => reject message
@@ -837,7 +837,7 @@ uint8_t at90can_get_buffered_message(can_t *msg)
  400:	ec 01       	movw	r28, r24
 	// get pointer to the first buffered message
 	can_t *buf = can_buffer_get_dequeue_ptr(&can_rx_buffer);
- 402:	8f e5       	ldi	r24, 0x5F	; 95
+ 402:	80 e6       	ldi	r24, 0x60	; 96
  404:	92 e0       	ldi	r25, 0x02	; 2
  406:	0e 94 d7 03 	call	0x7ae	; 0x7ae <can_buffer_get_dequeue_ptr>
  40a:	fc 01       	movw	r30, r24
@@ -858,7 +858,7 @@ uint8_t at90can_get_buffered_message(can_t *msg)
 	
 	// delete message from the queue
 	can_buffer_dequeue(&can_rx_buffer);
- 41c:	8f e5       	ldi	r24, 0x5F	; 95
+ 41c:	80 e6       	ldi	r24, 0x60	; 96
  41e:	92 e0       	ldi	r25, 0x02	; 2
  420:	0e 94 f3 03 	call	0x7e6	; 0x7e6 <can_buffer_dequeue>
 	
@@ -1052,7 +1052,7 @@ uint8_t at90can_send_buffered_message(const can_t *msg)
 #endif
 	{
 		can_t *buf = can_buffer_get_enqueue_ptr(&can_tx_buffer); 
- 4e8:	89 e9       	ldi	r24, 0x99	; 153
+ 4e8:	8a e9       	ldi	r24, 0x9A	; 154
  4ea:	91 e0       	ldi	r25, 0x01	; 1
  4ec:	0e 94 ac 03 	call	0x758	; 0x758 <can_buffer_get_enqueue_ptr>
 		
@@ -1090,7 +1090,7 @@ static __inline__ uint8_t __iCliRetVal(void)
  50c:	31 f0       	breq	.+12     	; 0x51a <can_send_message+0x42>
 		{
 			can_buffer_enqueue(&can_tx_buffer);
- 50e:	89 e9       	ldi	r24, 0x99	; 153
+ 50e:	8a e9       	ldi	r24, 0x9A	; 154
  510:	91 e0       	ldi	r25, 0x01	; 1
  512:	0e 94 c8 03 	call	0x790	; 0x790 <can_buffer_enqueue>
 			enqueued = true;
@@ -1866,8 +1866,8 @@ static __inline__ void __iRestore(const  uint8_t *__s)
  802:	08 95       	ret
 
 00000804 <DrsPwmInit>:
-#define OCR1B_CLOSE 17700
-#define OCR1B_OPEN 3300
+#define OCR1B_CLOSE 10000         // 11000
+#define OCR1B_OPEN 7000           // 5400
 
 void DrsPwmInit()
 {
@@ -1898,13 +1898,13 @@ void DrsPwmInit()
  82c:	90 93 87 00 	sts	0x0087, r25
  830:	80 93 86 00 	sts	0x0086, r24
 	OCR1A = OCR1A_CLOSE;
- 834:	84 ee       	ldi	r24, 0xE4	; 228
- 836:	9c e0       	ldi	r25, 0x0C	; 12
+ 834:	88 e5       	ldi	r24, 0x58	; 88
+ 836:	9b e1       	ldi	r25, 0x1B	; 27
  838:	90 93 89 00 	sts	0x0089, r25
  83c:	80 93 88 00 	sts	0x0088, r24
 	OCR1B = OCR1B_CLOSE;
- 840:	84 e2       	ldi	r24, 0x24	; 36
- 842:	95 e4       	ldi	r25, 0x45	; 69
+ 840:	80 e1       	ldi	r24, 0x10	; 16
+ 842:	97 e2       	ldi	r25, 0x27	; 39
  844:	90 93 8b 00 	sts	0x008B, r25
  848:	80 93 8a 00 	sts	0x008A, r24
 	
@@ -1921,22 +1921,22 @@ void DrsPwmInit()
 void DrsOpen()
 {
 	if( DRS_state == 1 ) return; // juz otwarte wiec nic nie rob
- 854:	80 91 38 01 	lds	r24, 0x0138
+ 854:	80 91 39 01 	lds	r24, 0x0139
  858:	81 30       	cpi	r24, 0x01	; 1
  85a:	79 f0       	breq	.+30     	; 0x87a <DrsOpen+0x26>
 	OCR1A = OCR1A_OPEN;
- 85c:	84 e2       	ldi	r24, 0x24	; 36
- 85e:	95 e4       	ldi	r25, 0x45	; 69
+ 85c:	80 e1       	ldi	r24, 0x10	; 16
+ 85e:	97 e2       	ldi	r25, 0x27	; 39
  860:	90 93 89 00 	sts	0x0089, r25
  864:	80 93 88 00 	sts	0x0088, r24
 	OCR1B = OCR1B_OPEN;
- 868:	84 ee       	ldi	r24, 0xE4	; 228
- 86a:	9c e0       	ldi	r25, 0x0C	; 12
+ 868:	88 e5       	ldi	r24, 0x58	; 88
+ 86a:	9b e1       	ldi	r25, 0x1B	; 27
  86c:	90 93 8b 00 	sts	0x008B, r25
  870:	80 93 8a 00 	sts	0x008A, r24
 	DRS_state = 1;
  874:	81 e0       	ldi	r24, 0x01	; 1
- 876:	80 93 38 01 	sts	0x0138, r24
+ 876:	80 93 39 01 	sts	0x0139, r24
  87a:	08 95       	ret
 
 0000087c <DrsClose>:
@@ -1945,21 +1945,21 @@ void DrsOpen()
 void DrsClose()
 {
 	if( DRS_state == 0 ) return; // juz zamkniete wiec nic nie rob
- 87c:	80 91 38 01 	lds	r24, 0x0138
+ 87c:	80 91 39 01 	lds	r24, 0x0139
  880:	88 23       	and	r24, r24
  882:	71 f0       	breq	.+28     	; 0x8a0 <DrsClose+0x24>
 	OCR1A = OCR1A_CLOSE;
- 884:	84 ee       	ldi	r24, 0xE4	; 228
- 886:	9c e0       	ldi	r25, 0x0C	; 12
+ 884:	88 e5       	ldi	r24, 0x58	; 88
+ 886:	9b e1       	ldi	r25, 0x1B	; 27
  888:	90 93 89 00 	sts	0x0089, r25
  88c:	80 93 88 00 	sts	0x0088, r24
 	OCR1B = OCR1B_CLOSE;
- 890:	84 e2       	ldi	r24, 0x24	; 36
- 892:	95 e4       	ldi	r25, 0x45	; 69
+ 890:	80 e1       	ldi	r24, 0x10	; 16
+ 892:	97 e2       	ldi	r25, 0x27	; 39
  894:	90 93 8b 00 	sts	0x008B, r25
  898:	80 93 8a 00 	sts	0x008A, r24
 	DRS_state = 0;
- 89c:	10 92 38 01 	sts	0x0138, r1
+ 89c:	10 92 39 01 	sts	0x0139, r1
  8a0:	08 95       	ret
 
 000008a2 <__vector_16>:
@@ -2011,7 +2011,7 @@ ISR(TIMER0_COMP_vect)
  8f6:	80 91 36 01 	lds	r24, 0x0136
  8fa:	90 91 37 01 	lds	r25, 0x0137
  8fe:	a1 e0       	ldi	r26, 0x01	; 1
- 900:	0e 94 b8 05 	call	0xb70	; 0xb70 <__adddi3_s8>
+ 900:	0e 94 f2 05 	call	0xbe4	; 0xbe4 <__adddi3_s8>
  904:	20 93 30 01 	sts	0x0130, r18
  908:	30 93 31 01 	sts	0x0131, r19
  90c:	40 93 32 01 	sts	0x0132, r20
@@ -2022,6 +2022,7 @@ ISR(TIMER0_COMP_vect)
  920:	90 93 37 01 	sts	0x0137, r25
 	
 	// old timer_counter % 100 == 0
+	// trigger wysylania ramki can ze statusem drsu dla aima
 	if(timer_counter >= DRS_state_msg_next_tick )
  924:	20 91 30 01 	lds	r18, 0x0130
  928:	30 91 31 01 	lds	r19, 0x0131
@@ -2047,7 +2048,7 @@ ISR(TIMER0_COMP_vect)
  96e:	fa 2e       	mov	r15, r26
  970:	0f 2f       	mov	r16, r31
  972:	1e 2f       	mov	r17, r30
- 974:	0e 94 c4 05 	call	0xb88	; 0xb88 <__cmpdi2>
+ 974:	0e 94 fe 05 	call	0xbfc	; 0xbfc <__cmpdi2>
  978:	f0 f0       	brcs	.+60     	; 0x9b6 <__stack+0xb7>
 	{
 		DRS_state_msg_next_tick += 100;
@@ -2060,7 +2061,7 @@ ISR(TIMER0_COMP_vect)
  986:	8f 2f       	mov	r24, r31
  988:	9e 2f       	mov	r25, r30
  98a:	a4 e6       	ldi	r26, 0x64	; 100
- 98c:	0e 94 b8 05 	call	0xb70	; 0xb70 <__adddi3_s8>
+ 98c:	0e 94 f2 05 	call	0xbe4	; 0xbe4 <__adddi3_s8>
  990:	20 93 00 01 	sts	0x0100, r18
  994:	30 93 01 01 	sts	0x0101, r19
  998:	40 93 02 01 	sts	0x0102, r20
@@ -2074,296 +2075,360 @@ ISR(TIMER0_COMP_vect)
  9b2:	80 93 27 01 	sts	0x0127, r24
 	}
 	
-	if(timer_counter - DRS_MAX_OPEN_TICKS > DRS_timer_count ){
- 9b6:	20 91 30 01 	lds	r18, 0x0130
- 9ba:	30 91 31 01 	lds	r19, 0x0131
- 9be:	40 91 32 01 	lds	r20, 0x0132
- 9c2:	50 91 33 01 	lds	r21, 0x0133
- 9c6:	60 91 34 01 	lds	r22, 0x0134
- 9ca:	70 91 35 01 	lds	r23, 0x0135
- 9ce:	80 91 36 01 	lds	r24, 0x0136
- 9d2:	90 91 37 01 	lds	r25, 0x0137
- 9d6:	a0 90 28 01 	lds	r10, 0x0128
- 9da:	b0 90 29 01 	lds	r11, 0x0129
- 9de:	c0 90 2a 01 	lds	r12, 0x012A
- 9e2:	d0 90 2b 01 	lds	r13, 0x012B
- 9e6:	e0 90 2c 01 	lds	r14, 0x012C
- 9ea:	f0 90 2d 01 	lds	r15, 0x012D
- 9ee:	00 91 2e 01 	lds	r16, 0x012E
- 9f2:	10 91 2f 01 	lds	r17, 0x012F
- 9f6:	28 5c       	subi	r18, 0xC8	; 200
- 9f8:	31 09       	sbc	r19, r1
- 9fa:	41 09       	sbc	r20, r1
- 9fc:	51 09       	sbc	r21, r1
- 9fe:	61 09       	sbc	r22, r1
- a00:	71 09       	sbc	r23, r1
- a02:	81 09       	sbc	r24, r1
- a04:	91 09       	sbc	r25, r1
- a06:	0e 94 c4 05 	call	0xb88	; 0xb88 <__cmpdi2>
- a0a:	19 f0       	breq	.+6      	; 0xa12 <__stack+0x113>
- a0c:	10 f0       	brcs	.+4      	; 0xa12 <__stack+0x113>
+	// jesli uplynie czas odświeżenia wiadomości CAN to zamknij DRS
+	if( DRS_timer_count + DRS_MAX_OPEN_TICKS < timer_counter ){
+ 9b6:	20 91 28 01 	lds	r18, 0x0128
+ 9ba:	30 91 29 01 	lds	r19, 0x0129
+ 9be:	40 91 2a 01 	lds	r20, 0x012A
+ 9c2:	50 91 2b 01 	lds	r21, 0x012B
+ 9c6:	60 91 2c 01 	lds	r22, 0x012C
+ 9ca:	70 91 2d 01 	lds	r23, 0x012D
+ 9ce:	80 91 2e 01 	lds	r24, 0x012E
+ 9d2:	90 91 2f 01 	lds	r25, 0x012F
+ 9d6:	a0 90 30 01 	lds	r10, 0x0130
+ 9da:	b0 90 31 01 	lds	r11, 0x0131
+ 9de:	c0 90 32 01 	lds	r12, 0x0132
+ 9e2:	d0 90 33 01 	lds	r13, 0x0133
+ 9e6:	e0 90 34 01 	lds	r14, 0x0134
+ 9ea:	f0 90 35 01 	lds	r15, 0x0135
+ 9ee:	00 91 36 01 	lds	r16, 0x0136
+ 9f2:	10 91 37 01 	lds	r17, 0x0137
+ 9f6:	2c 50       	subi	r18, 0x0C	; 12
+ 9f8:	3e 4f       	sbci	r19, 0xFE	; 254
+ 9fa:	4f 4f       	sbci	r20, 0xFF	; 255
+ 9fc:	5f 4f       	sbci	r21, 0xFF	; 255
+ 9fe:	6f 4f       	sbci	r22, 0xFF	; 255
+ a00:	7f 4f       	sbci	r23, 0xFF	; 255
+ a02:	8f 4f       	sbci	r24, 0xFF	; 255
+ a04:	9f 4f       	sbci	r25, 0xFF	; 255
+ a06:	0e 94 fe 05 	call	0xbfc	; 0xbfc <__cmpdi2>
+ a0a:	28 f4       	brcc	.+10     	; 0xa16 <__stack+0x117>
 		// wyjebka DRSa
 		//DRS_available = 0;
-		LedNumber(5);
+		CAN_frame_timeout_flag = 1;
+ a0c:	81 e0       	ldi	r24, 0x01	; 1
+ a0e:	80 93 38 01 	sts	0x0138, r24
 		DrsClose();
- a0e:	0e 94 3e 04 	call	0x87c	; 0x87c <DrsClose>
+ a12:	0e 94 3e 04 	call	0x87c	; 0x87c <DrsClose>
 	}
 }
- a12:	ff 91       	pop	r31
- a14:	ef 91       	pop	r30
- a16:	df 91       	pop	r29
- a18:	cf 91       	pop	r28
- a1a:	bf 91       	pop	r27
- a1c:	af 91       	pop	r26
- a1e:	9f 91       	pop	r25
- a20:	8f 91       	pop	r24
- a22:	7f 91       	pop	r23
- a24:	6f 91       	pop	r22
- a26:	5f 91       	pop	r21
- a28:	4f 91       	pop	r20
- a2a:	3f 91       	pop	r19
- a2c:	2f 91       	pop	r18
- a2e:	1f 91       	pop	r17
- a30:	0f 91       	pop	r16
- a32:	ff 90       	pop	r15
- a34:	ef 90       	pop	r14
- a36:	df 90       	pop	r13
- a38:	cf 90       	pop	r12
- a3a:	bf 90       	pop	r11
- a3c:	af 90       	pop	r10
- a3e:	9f 90       	pop	r9
- a40:	8f 90       	pop	r8
- a42:	0f 90       	pop	r0
- a44:	0f be       	out	0x3f, r0	; 63
+ a16:	ff 91       	pop	r31
+ a18:	ef 91       	pop	r30
+ a1a:	df 91       	pop	r29
+ a1c:	cf 91       	pop	r28
+ a1e:	bf 91       	pop	r27
+ a20:	af 91       	pop	r26
+ a22:	9f 91       	pop	r25
+ a24:	8f 91       	pop	r24
+ a26:	7f 91       	pop	r23
+ a28:	6f 91       	pop	r22
+ a2a:	5f 91       	pop	r21
+ a2c:	4f 91       	pop	r20
+ a2e:	3f 91       	pop	r19
+ a30:	2f 91       	pop	r18
+ a32:	1f 91       	pop	r17
+ a34:	0f 91       	pop	r16
+ a36:	ff 90       	pop	r15
+ a38:	ef 90       	pop	r14
+ a3a:	df 90       	pop	r13
+ a3c:	cf 90       	pop	r12
+ a3e:	bf 90       	pop	r11
+ a40:	af 90       	pop	r10
+ a42:	9f 90       	pop	r9
+ a44:	8f 90       	pop	r8
  a46:	0f 90       	pop	r0
- a48:	1f 90       	pop	r1
- a4a:	18 95       	reti
+ a48:	0f be       	out	0x3f, r0	; 63
+ a4a:	0f 90       	pop	r0
+ a4c:	1f 90       	pop	r1
+ a4e:	18 95       	reti
 
-00000a4c <LedInit>:
+00000a50 <LedInit>:
 	DRS_state = 0;
 }
 
 void LedInit()
 {
 	DDRB |= 1<<DDB0 | 1<<DDB2 | 1<<DDB3;
- a4c:	84 b1       	in	r24, 0x04	; 4
- a4e:	8d 60       	ori	r24, 0x0D	; 13
- a50:	84 b9       	out	0x04, r24	; 4
+ a50:	84 b1       	in	r24, 0x04	; 4
+ a52:	8d 60       	ori	r24, 0x0D	; 13
+ a54:	84 b9       	out	0x04, r24	; 4
 	PORTB = ~((~PORTB) | (1<<DDB0 | 1<<DDB2 | 1<<DDB3)); // wyzerowanie odpowiednich bit�w
- a52:	85 b1       	in	r24, 0x05	; 5
- a54:	82 7f       	andi	r24, 0xF2	; 242
- a56:	85 b9       	out	0x05, r24	; 5
- a58:	08 95       	ret
+ a56:	85 b1       	in	r24, 0x05	; 5
+ a58:	82 7f       	andi	r24, 0xF2	; 242
+ a5a:	85 b9       	out	0x05, r24	; 5
+ a5c:	08 95       	ret
 
-00000a5a <TickTimerInit>:
+00000a5e <LedThread>:
+}
+
+void LedThread( )
+{
+	// DDB0 status DRS
+	if(DRS_state == 1) PORTB |= 1<<DDB0;
+ a5e:	80 91 39 01 	lds	r24, 0x0139
+ a62:	81 30       	cpi	r24, 0x01	; 1
+ a64:	11 f4       	brne	.+4      	; 0xa6a <LedThread+0xc>
+ a66:	28 9a       	sbi	0x05, 0	; 5
+ a68:	01 c0       	rjmp	.+2      	; 0xa6c <LedThread+0xe>
+	else PORTB = ~((~PORTB)|(1<<DDB0));
+ a6a:	28 98       	cbi	0x05, 0	; 5
+	// DDB2 can frame problem
+	if(CAN_frame_timeout_flag == 1) PORTB |= 1<<DDB2;
+ a6c:	80 91 38 01 	lds	r24, 0x0138
+ a70:	81 30       	cpi	r24, 0x01	; 1
+ a72:	11 f4       	brne	.+4      	; 0xa78 <LedThread+0x1a>
+ a74:	2a 9a       	sbi	0x05, 2	; 5
+ a76:	08 95       	ret
+	else PORTB = ~((~PORTB)|(1<<DDB2));
+ a78:	2a 98       	cbi	0x05, 2	; 5
+ a7a:	08 95       	ret
+
+00000a7c <TickTimerInit>:
 void TickTimerInit(){
 	// fcpu 16 MHz
 	// preskaler 64
 	// comp 249
 	// 16 000 000 / (64 * (249+1)) = 16000 ---> 1ms
 	TCCR0A = 1<<CS1 | 1 << CS0;
- a5a:	83 e0       	ldi	r24, 0x03	; 3
- a5c:	84 bd       	out	0x24, r24	; 36
+ a7c:	83 e0       	ldi	r24, 0x03	; 3
+ a7e:	84 bd       	out	0x24, r24	; 36
 	TCNT0 = 0;
- a5e:	16 bc       	out	0x26, r1	; 38
+ a80:	16 bc       	out	0x26, r1	; 38
 	OCR0A = 249;
- a60:	99 ef       	ldi	r25, 0xF9	; 249
- a62:	97 bd       	out	0x27, r25	; 39
+ a82:	99 ef       	ldi	r25, 0xF9	; 249
+ a84:	97 bd       	out	0x27, r25	; 39
 	TIFR0 = 0b11; // clearing interrupt flags
- a64:	85 bb       	out	0x15, r24	; 21
+ a86:	85 bb       	out	0x15, r24	; 21
 	TIMSK0 = 1<<OCIE0A;
- a66:	82 e0       	ldi	r24, 0x02	; 2
- a68:	80 93 6e 00 	sts	0x006E, r24
- a6c:	08 95       	ret
+ a88:	82 e0       	ldi	r24, 0x02	; 2
+ a8a:	80 93 6e 00 	sts	0x006E, r24
+ a8e:	08 95       	ret
 
-00000a6e <CanThread>:
+00000a90 <CanThread>:
 
 void CanThread()
 {
 	static can_t rx_message; // received message structure
 	static can_t tx_message;
 	if(can_get_message(&rx_message))
- a6e:	8b e1       	ldi	r24, 0x1B	; 27
- a70:	91 e0       	ldi	r25, 0x01	; 1
- a72:	0e 94 fe 01 	call	0x3fc	; 0x3fc <can_get_message>
- a76:	88 23       	and	r24, r24
- a78:	09 f4       	brne	.+2      	; 0xa7c <CanThread+0xe>
- a7a:	47 c0       	rjmp	.+142    	; 0xb0a <CanThread+0x9c>
+ a90:	8b e1       	ldi	r24, 0x1B	; 27
+ a92:	91 e0       	ldi	r25, 0x01	; 1
+ a94:	0e 94 fe 01 	call	0x3fc	; 0x3fc <can_get_message>
+ a98:	88 23       	and	r24, r24
+ a9a:	09 f4       	brne	.+2      	; 0xa9e <CanThread+0xe>
+ a9c:	6e c0       	rjmp	.+220    	; 0xb7a <CanThread+0xea>
 	{
+		//debug dostaje ramki
+		//PORTB ^= 1 << DDB3;
 		// ramka odebrana hamulca
 		if( rx_message.id == FRAME_DRS_SWITCH_ID && rx_message.length == 8)
- a7c:	80 91 1b 01 	lds	r24, 0x011B
- a80:	90 91 1c 01 	lds	r25, 0x011C
- a84:	01 97       	sbiw	r24, 0x01	; 1
- a86:	09 f0       	breq	.+2      	; 0xa8a <CanThread+0x1c>
- a88:	40 c0       	rjmp	.+128    	; 0xb0a <CanThread+0x9c>
- a8a:	80 91 1e 01 	lds	r24, 0x011E
- a8e:	88 30       	cpi	r24, 0x08	; 8
- a90:	81 f5       	brne	.+96     	; 0xaf2 <CanThread+0x84>
+ a9e:	80 91 1b 01 	lds	r24, 0x011B
+ aa2:	90 91 1c 01 	lds	r25, 0x011C
+ aa6:	01 97       	sbiw	r24, 0x01	; 1
+ aa8:	09 f0       	breq	.+2      	; 0xaac <CanThread+0x1c>
+ aaa:	67 c0       	rjmp	.+206    	; 0xb7a <CanThread+0xea>
+ aac:	80 91 1e 01 	lds	r24, 0x011E
+ ab0:	88 30       	cpi	r24, 0x08	; 8
+ ab2:	a9 f5       	brne	.+106    	; 0xb1e <CanThread+0x8e>
 		{
+			DRS_timer_count = timer_counter;
+ ab4:	70 91 30 01 	lds	r23, 0x0130
+ ab8:	60 91 31 01 	lds	r22, 0x0131
+ abc:	50 91 32 01 	lds	r21, 0x0132
+ ac0:	40 91 33 01 	lds	r20, 0x0133
+ ac4:	30 91 34 01 	lds	r19, 0x0134
+ ac8:	20 91 35 01 	lds	r18, 0x0135
+ acc:	90 91 36 01 	lds	r25, 0x0136
+ ad0:	80 91 37 01 	lds	r24, 0x0137
+ ad4:	70 93 28 01 	sts	0x0128, r23
+ ad8:	60 93 29 01 	sts	0x0129, r22
+ adc:	50 93 2a 01 	sts	0x012A, r21
+ ae0:	40 93 2b 01 	sts	0x012B, r20
+ ae4:	30 93 2c 01 	sts	0x012C, r19
+ ae8:	20 93 2d 01 	sts	0x012D, r18
+ aec:	90 93 2e 01 	sts	0x012E, r25
+ af0:	80 93 2f 01 	sts	0x012F, r24
+			CAN_frame_timeout_flag = 0;
+ af4:	10 92 38 01 	sts	0x0138, r1
+			
+			//debug dostaje ramki przycisku
+			//PORTB ^= 1 << DDB3;
+			
 			if((rx_message.data[FRAME_DRS_SWITCH_BYTE]>>FRAME_DRS_SWITCH_BIT)&0x01)
- a92:	80 91 26 01 	lds	r24, 0x0126
- a96:	83 ff       	sbrs	r24, 3
- a98:	2c c0       	rjmp	.+88     	; 0xaf2 <CanThread+0x84>
-			{
+ af8:	80 91 26 01 	lds	r24, 0x0126
+ afc:	82 ff       	sbrs	r24, 2
+ afe:	07 c0       	rjmp	.+14     	; 0xb0e <CanThread+0x7e>
+				//debug zinterpretowany przycisk otwarcia DRSu
+				//PORTB ^= 1 << DDB3;
+				
 				// sygna� otwarcia Drsa
 				// timestamp
 				if(DRS_available){
- a9a:	80 91 08 01 	lds	r24, 0x0108
- a9e:	88 23       	and	r24, r24
- aa0:	41 f1       	breq	.+80     	; 0xaf2 <CanThread+0x84>
+ b00:	80 91 08 01 	lds	r24, 0x0108
+ b04:	88 23       	and	r24, r24
+ b06:	29 f0       	breq	.+10     	; 0xb12 <CanThread+0x82>
 					DrsOpen();
- aa2:	0e 94 2a 04 	call	0x854	; 0x854 <DrsOpen>
-					DRS_timer_count = timer_counter;
- aa6:	70 91 30 01 	lds	r23, 0x0130
- aaa:	60 91 31 01 	lds	r22, 0x0131
- aae:	50 91 32 01 	lds	r21, 0x0132
- ab2:	40 91 33 01 	lds	r20, 0x0133
- ab6:	30 91 34 01 	lds	r19, 0x0134
- aba:	20 91 35 01 	lds	r18, 0x0135
- abe:	90 91 36 01 	lds	r25, 0x0136
- ac2:	80 91 37 01 	lds	r24, 0x0137
- ac6:	70 93 28 01 	sts	0x0128, r23
- aca:	60 93 29 01 	sts	0x0129, r22
- ace:	50 93 2a 01 	sts	0x012A, r21
- ad2:	40 93 2b 01 	sts	0x012B, r20
- ad6:	30 93 2c 01 	sts	0x012C, r19
- ada:	20 93 2d 01 	sts	0x012D, r18
- ade:	90 93 2e 01 	sts	0x012E, r25
- ae2:	80 93 2f 01 	sts	0x012F, r24
-			{
+ b08:	0e 94 2a 04 	call	0x854	; 0x854 <DrsOpen>
+ b0c:	02 c0       	rjmp	.+4      	; 0xb12 <CanThread+0x82>
+				//debug zinterpretowany przycisk zamkniecia DRSu
+				//PORTB ^= 1 << DDB3;
+				
 				// sygna� zamkniecia Drsa
 				// timestamp nie ustawiany, drs zamknie się automatycznie w przerwaniu po ustalonym czasie
+				DrsClose();
+ b0e:	0e 94 3e 04 	call	0x87c	; 0x87c <DrsClose>
 			}
 		}
 		if( rx_message.id == FRAME_BRAKE_ID )
- ae6:	80 91 1b 01 	lds	r24, 0x011B
- aea:	90 91 1c 01 	lds	r25, 0x011C
- aee:	01 97       	sbiw	r24, 0x01	; 1
- af0:	61 f4       	brne	.+24     	; 0xb0a <CanThread+0x9c>
+ b12:	80 91 1b 01 	lds	r24, 0x011B
+ b16:	90 91 1c 01 	lds	r25, 0x011C
+ b1a:	01 97       	sbiw	r24, 0x01	; 1
+ b1c:	71 f5       	brne	.+92     	; 0xb7a <CanThread+0xea>
 		{
+			DRS_timer_count = timer_counter;
+ b1e:	70 91 30 01 	lds	r23, 0x0130
+ b22:	60 91 31 01 	lds	r22, 0x0131
+ b26:	50 91 32 01 	lds	r21, 0x0132
+ b2a:	40 91 33 01 	lds	r20, 0x0133
+ b2e:	30 91 34 01 	lds	r19, 0x0134
+ b32:	20 91 35 01 	lds	r18, 0x0135
+ b36:	90 91 36 01 	lds	r25, 0x0136
+ b3a:	80 91 37 01 	lds	r24, 0x0137
+ b3e:	70 93 28 01 	sts	0x0128, r23
+ b42:	60 93 29 01 	sts	0x0129, r22
+ b46:	50 93 2a 01 	sts	0x012A, r21
+ b4a:	40 93 2b 01 	sts	0x012B, r20
+ b4e:	30 93 2c 01 	sts	0x012C, r19
+ b52:	20 93 2d 01 	sts	0x012D, r18
+ b56:	90 93 2e 01 	sts	0x012E, r25
+ b5a:	80 93 2f 01 	sts	0x012F, r24
+			CAN_frame_timeout_flag = 0;
+ b5e:	10 92 38 01 	sts	0x0138, r1
+			
 			if((rx_message.data[FRAME_BRAKE_BYTE]>>FRAME_BRAKE_BIT)&0x01 == 1)
- af2:	80 91 26 01 	lds	r24, 0x0126
- af6:	80 ff       	sbrs	r24, 0
- af8:	05 c0       	rjmp	.+10     	; 0xb04 <CanThread+0x96>
+ b62:	80 91 26 01 	lds	r24, 0x0126
+ b66:	80 ff       	sbrs	r24, 0
+ b68:	05 c0       	rjmp	.+10     	; 0xb74 <CanThread+0xe4>
 			{
 				DRS_available = 0; // drs not available
- afa:	10 92 08 01 	sts	0x0108, r1
+ b6a:	10 92 08 01 	sts	0x0108, r1
 				DrsClose();
- afe:	0e 94 3e 04 	call	0x87c	; 0x87c <DrsClose>
- b02:	03 c0       	rjmp	.+6      	; 0xb0a <CanThread+0x9c>
+ b6e:	0e 94 3e 04 	call	0x87c	; 0x87c <DrsClose>
+ b72:	03 c0       	rjmp	.+6      	; 0xb7a <CanThread+0xea>
 			}
 			else
 			{
 				// drs available after braking stop
 				DRS_available = 1;
- b04:	81 e0       	ldi	r24, 0x01	; 1
- b06:	80 93 08 01 	sts	0x0108, r24
+ b74:	81 e0       	ldi	r24, 0x01	; 1
+ b76:	80 93 08 01 	sts	0x0108, r24
 			}
 		}
 		
 	}
 	if(DRS_state_msg_trig == 1)
- b0a:	80 91 27 01 	lds	r24, 0x0127
- b0e:	81 30       	cpi	r24, 0x01	; 1
- b10:	b9 f4       	brne	.+46     	; 0xb40 <CanThread+0xd2>
+ b7a:	80 91 27 01 	lds	r24, 0x0127
+ b7e:	81 30       	cpi	r24, 0x01	; 1
+ b80:	b9 f4       	brne	.+46     	; 0xbb0 <CanThread+0x120>
 	{
 		DRS_state_msg_trig = 0;
- b12:	10 92 27 01 	sts	0x0127, r1
+ b82:	10 92 27 01 	sts	0x0127, r1
 		
 		tx_message.id = FRAME_DRS_STATUS_ID; // 13
- b16:	10 92 10 01 	sts	0x0110, r1
- b1a:	10 92 0f 01 	sts	0x010F, r1
+ b86:	10 92 10 01 	sts	0x0110, r1
+ b8a:	10 92 0f 01 	sts	0x010F, r1
 		tx_message.flags.rtr = 0;
- b1e:	e1 e1       	ldi	r30, 0x11	; 17
- b20:	f1 e0       	ldi	r31, 0x01	; 1
- b22:	80 81       	ld	r24, Z
- b24:	8e 7f       	andi	r24, 0xFE	; 254
- b26:	80 83       	st	Z, r24
+ b8e:	e1 e1       	ldi	r30, 0x11	; 17
+ b90:	f1 e0       	ldi	r31, 0x01	; 1
+ b92:	80 81       	ld	r24, Z
+ b94:	8e 7f       	andi	r24, 0xFE	; 254
+ b96:	80 83       	st	Z, r24
 		tx_message.length = 1;
- b28:	81 e0       	ldi	r24, 0x01	; 1
- b2a:	80 93 12 01 	sts	0x0112, r24
+ b98:	81 e0       	ldi	r24, 0x01	; 1
+ b9a:	80 93 12 01 	sts	0x0112, r24
 		tx_message.data[0] = (DRS_state&0x01)<<FRAME_DRS_STATUS_BIT;
- b2e:	80 91 38 01 	lds	r24, 0x0138
- b32:	81 70       	andi	r24, 0x01	; 1
- b34:	80 93 13 01 	sts	0x0113, r24
+ b9e:	80 91 39 01 	lds	r24, 0x0139
+ ba2:	81 70       	andi	r24, 0x01	; 1
+ ba4:	80 93 13 01 	sts	0x0113, r24
 		can_send_message(&tx_message);
- b38:	8f e0       	ldi	r24, 0x0F	; 15
- b3a:	91 e0       	ldi	r25, 0x01	; 1
- b3c:	0e 94 6c 02 	call	0x4d8	; 0x4d8 <can_send_message>
- b40:	08 95       	ret
+ ba8:	8f e0       	ldi	r24, 0x0F	; 15
+ baa:	91 e0       	ldi	r25, 0x01	; 1
+ bac:	0e 94 6c 02 	call	0x4d8	; 0x4d8 <can_send_message>
+ bb0:	08 95       	ret
 
-00000b42 <main>:
+00000bb2 <main>:
 void CanThread();
 
 int main(void)
 {
 	// preskaler zegara cpu na 1
 	asm("ldi r16,0x80");
- b42:	00 e8       	ldi	r16, 0x80	; 128
+ bb2:	00 e8       	ldi	r16, 0x80	; 128
 	asm("sts 0x61,r16"); //CLKPR
- b44:	00 93 61 00 	sts	0x0061, r16
+ bb4:	00 93 61 00 	sts	0x0061, r16
 	asm("sts 0x61,r16"); // CLKPR
- b48:	00 93 61 00 	sts	0x0061, r16
+ bb8:	00 93 61 00 	sts	0x0061, r16
 	
 	LedInit();
- b4c:	0e 94 26 05 	call	0xa4c	; 0xa4c <LedInit>
+ bbc:	0e 94 28 05 	call	0xa50	; 0xa50 <LedInit>
 	DrsPwmInit();
- b50:	0e 94 02 04 	call	0x804	; 0x804 <DrsPwmInit>
+ bc0:	0e 94 02 04 	call	0x804	; 0x804 <DrsPwmInit>
 	TickTimerInit();
- b54:	0e 94 2d 05 	call	0xa5a	; 0xa5a <TickTimerInit>
+ bc4:	0e 94 3e 05 	call	0xa7c	; 0xa7c <TickTimerInit>
 
 	can_init(BITRATE_1_MBPS);
- b58:	87 e0       	ldi	r24, 0x07	; 7
- b5a:	0e 94 d9 00 	call	0x1b2	; 0x1b2 <can_init>
+ bc8:	87 e0       	ldi	r24, 0x07	; 7
+ bca:	0e 94 d9 00 	call	0x1b2	; 0x1b2 <can_init>
 	can_set_filter(1, &filtersetup);
- b5e:	69 e0       	ldi	r22, 0x09	; 9
- b60:	71 e0       	ldi	r23, 0x01	; 1
- b62:	81 e0       	ldi	r24, 0x01	; 1
- b64:	0e 94 0a 03 	call	0x614	; 0x614 <can_set_filter>
-	msg.data[3] = 0x04;
+ bce:	69 e0       	ldi	r22, 0x09	; 9
+ bd0:	71 e0       	ldi	r23, 0x01	; 1
+ bd2:	81 e0       	ldi	r24, 0x01	; 1
+ bd4:	0e 94 0a 03 	call	0x614	; 0x614 <can_set_filter>
+	//msg.data[3] = 0x04;
 
 	//can_send_message(&msg);
 
 	// odblokowane przerwania dla CANa
 	sei();
- b68:	78 94       	sei
+ bd8:	78 94       	sei
 
-	can_t rxmsg;
+	//can_t rxmsg;
 
 	while(1)
 	{
 		CanThread();
- b6a:	0e 94 37 05 	call	0xa6e	; 0xa6e <CanThread>
- b6e:	fd cf       	rjmp	.-6      	; 0xb6a <main+0x28>
+ bda:	0e 94 48 05 	call	0xa90	; 0xa90 <CanThread>
+		LedThread();
+ bde:	0e 94 2f 05 	call	0xa5e	; 0xa5e <LedThread>
+ be2:	fb cf       	rjmp	.-10     	; 0xbda <main+0x28>
 
-00000b70 <__adddi3_s8>:
- b70:	00 24       	eor	r0, r0
- b72:	a7 fd       	sbrc	r26, 7
- b74:	00 94       	com	r0
- b76:	2a 0f       	add	r18, r26
- b78:	30 1d       	adc	r19, r0
- b7a:	40 1d       	adc	r20, r0
- b7c:	50 1d       	adc	r21, r0
- b7e:	60 1d       	adc	r22, r0
- b80:	70 1d       	adc	r23, r0
- b82:	80 1d       	adc	r24, r0
- b84:	90 1d       	adc	r25, r0
- b86:	08 95       	ret
+00000be4 <__adddi3_s8>:
+ be4:	00 24       	eor	r0, r0
+ be6:	a7 fd       	sbrc	r26, 7
+ be8:	00 94       	com	r0
+ bea:	2a 0f       	add	r18, r26
+ bec:	30 1d       	adc	r19, r0
+ bee:	40 1d       	adc	r20, r0
+ bf0:	50 1d       	adc	r21, r0
+ bf2:	60 1d       	adc	r22, r0
+ bf4:	70 1d       	adc	r23, r0
+ bf6:	80 1d       	adc	r24, r0
+ bf8:	90 1d       	adc	r25, r0
+ bfa:	08 95       	ret
 
-00000b88 <__cmpdi2>:
- b88:	2a 15       	cp	r18, r10
- b8a:	3b 05       	cpc	r19, r11
- b8c:	4c 05       	cpc	r20, r12
- b8e:	5d 05       	cpc	r21, r13
- b90:	6e 05       	cpc	r22, r14
- b92:	7f 05       	cpc	r23, r15
- b94:	80 07       	cpc	r24, r16
- b96:	91 07       	cpc	r25, r17
- b98:	08 95       	ret
+00000bfc <__cmpdi2>:
+ bfc:	2a 15       	cp	r18, r10
+ bfe:	3b 05       	cpc	r19, r11
+ c00:	4c 05       	cpc	r20, r12
+ c02:	5d 05       	cpc	r21, r13
+ c04:	6e 05       	cpc	r22, r14
+ c06:	7f 05       	cpc	r23, r15
+ c08:	80 07       	cpc	r24, r16
+ c0a:	91 07       	cpc	r25, r17
+ c0c:	08 95       	ret
 
-00000b9a <_exit>:
- b9a:	f8 94       	cli
+00000c0e <_exit>:
+ c0e:	f8 94       	cli
 
-00000b9c <__stop_program>:
- b9c:	ff cf       	rjmp	.-2      	; 0xb9c <__stop_program>
+00000c10 <__stop_program>:
+ c10:	ff cf       	rjmp	.-2      	; 0xc10 <__stop_program>
