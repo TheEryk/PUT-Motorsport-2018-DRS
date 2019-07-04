@@ -131,12 +131,12 @@ int main(void)
 #define PRESCALER_1	0b001
 #define ICR1_TOP 48048 // 16 000 000 / 48 048 = 333 Hz
 
-//             nastawy tymczasowe //nastawy drs // zakresy serwa
-#define OCR1A_CLOSE 7000          // 5400       // minimum 3300, skrajna pozycja
-#define OCR1A_OPEN  10000         // 11000      // max 17700, skrajna pozycja
+//                             //nastawy drs // zakresy serwa
+#define OCR1A_CLOSE 5400       // minimum 3300, skrajna pozycja
+#define OCR1A_OPEN 11000      // max 17700, skrajna pozycja
 
-#define OCR1B_CLOSE 10000         // 11000
-#define OCR1B_OPEN 7000           // 5400
+#define OCR1B_CLOSE 11000         // 11000
+#define OCR1B_OPEN 5400           // 5400
 
 void DrsPwmInit()
 {

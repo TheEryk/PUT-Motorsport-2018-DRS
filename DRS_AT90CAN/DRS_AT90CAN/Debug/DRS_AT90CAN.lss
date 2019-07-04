@@ -1866,8 +1866,8 @@ static __inline__ void __iRestore(const  uint8_t *__s)
  802:	08 95       	ret
 
 00000804 <DrsPwmInit>:
-#define OCR1B_CLOSE 10000         // 11000
-#define OCR1B_OPEN 7000           // 5400
+#define OCR1B_CLOSE 11000         // 11000
+#define OCR1B_OPEN 5400           // 5400
 
 void DrsPwmInit()
 {
@@ -1898,13 +1898,13 @@ void DrsPwmInit()
  82c:	90 93 87 00 	sts	0x0087, r25
  830:	80 93 86 00 	sts	0x0086, r24
 	OCR1A = OCR1A_CLOSE;
- 834:	88 e5       	ldi	r24, 0x58	; 88
- 836:	9b e1       	ldi	r25, 0x1B	; 27
+ 834:	88 e1       	ldi	r24, 0x18	; 24
+ 836:	95 e1       	ldi	r25, 0x15	; 21
  838:	90 93 89 00 	sts	0x0089, r25
  83c:	80 93 88 00 	sts	0x0088, r24
 	OCR1B = OCR1B_CLOSE;
- 840:	80 e1       	ldi	r24, 0x10	; 16
- 842:	97 e2       	ldi	r25, 0x27	; 39
+ 840:	88 ef       	ldi	r24, 0xF8	; 248
+ 842:	9a e2       	ldi	r25, 0x2A	; 42
  844:	90 93 8b 00 	sts	0x008B, r25
  848:	80 93 8a 00 	sts	0x008A, r24
 	
@@ -1925,13 +1925,13 @@ void DrsOpen()
  858:	81 30       	cpi	r24, 0x01	; 1
  85a:	79 f0       	breq	.+30     	; 0x87a <DrsOpen+0x26>
 	OCR1A = OCR1A_OPEN;
- 85c:	80 e1       	ldi	r24, 0x10	; 16
- 85e:	97 e2       	ldi	r25, 0x27	; 39
+ 85c:	88 ef       	ldi	r24, 0xF8	; 248
+ 85e:	9a e2       	ldi	r25, 0x2A	; 42
  860:	90 93 89 00 	sts	0x0089, r25
  864:	80 93 88 00 	sts	0x0088, r24
 	OCR1B = OCR1B_OPEN;
- 868:	88 e5       	ldi	r24, 0x58	; 88
- 86a:	9b e1       	ldi	r25, 0x1B	; 27
+ 868:	88 e1       	ldi	r24, 0x18	; 24
+ 86a:	95 e1       	ldi	r25, 0x15	; 21
  86c:	90 93 8b 00 	sts	0x008B, r25
  870:	80 93 8a 00 	sts	0x008A, r24
 	DRS_state = 1;
@@ -1949,13 +1949,13 @@ void DrsClose()
  880:	88 23       	and	r24, r24
  882:	71 f0       	breq	.+28     	; 0x8a0 <DrsClose+0x24>
 	OCR1A = OCR1A_CLOSE;
- 884:	88 e5       	ldi	r24, 0x58	; 88
- 886:	9b e1       	ldi	r25, 0x1B	; 27
+ 884:	88 e1       	ldi	r24, 0x18	; 24
+ 886:	95 e1       	ldi	r25, 0x15	; 21
  888:	90 93 89 00 	sts	0x0089, r25
  88c:	80 93 88 00 	sts	0x0088, r24
 	OCR1B = OCR1B_CLOSE;
- 890:	80 e1       	ldi	r24, 0x10	; 16
- 892:	97 e2       	ldi	r25, 0x27	; 39
+ 890:	88 ef       	ldi	r24, 0xF8	; 248
+ 892:	9a e2       	ldi	r25, 0x2A	; 42
  894:	90 93 8b 00 	sts	0x008B, r25
  898:	80 93 8a 00 	sts	0x008A, r24
 	DRS_state = 0;
