@@ -287,9 +287,9 @@ $EndComp
 Wire Wire Line
 	6350 4050 6350 4100
 Text Label 8900 3750 2    50   ~ 0
-PWM2
+PWM2Out
 Text Label 6600 4400 0    50   ~ 0
-PWM2
+PWM2Out
 $Comp
 L Diode:BAT54S D13
 U 1 1 5CFB0967
@@ -341,9 +341,9 @@ $EndComp
 Wire Wire Line
 	6350 2850 6350 2900
 Text Label 6600 3200 0    50   ~ 0
-PWM1
+PWM1Out
 Text Label 8800 3000 2    50   ~ 0
-PWM1
+PWM1Out
 Wire Wire Line
 	6550 4400 6850 4400
 Wire Wire Line

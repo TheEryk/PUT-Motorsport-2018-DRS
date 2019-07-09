@@ -6,10 +6,10 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 3 3
 Title ""
-Date ""
-Rev ""
-Comp ""
-Comment1 ""
+Date "2019-06-10"
+Rev "V2"
+Comp "PUT Motorsport"
+Comment1 "Eryk Miśkiewicz"
 Comment2 ""
 Comment3 ""
 Comment4 ""
