@@ -204,13 +204,13 @@ void TickTimerInit(){
 
 #define FRAME_DRS_SWITCH_ID   0x01
 #define FRAME_DRS_SWITCH_BYTE 7
-#define FRAME_DRS_SWITCH_BIT  2 // tymczasowo gear up, zmienić we wtyczce zaktualizowac na 3
+#define FRAME_DRS_SWITCH_BIT  3 // tymczasowo gear up, zmienić we wtyczce zaktualizowac na 3
 
 #define FRAME_BRAKE_ID   0x01 // 0x01
 #define FRAME_BRAKE_BYTE 7 // 7
 #define FRAME_BRAKE_BIT  0 // 0
 
-#define FRAME_DRS_STATUS_ID   0x00
+#define FRAME_DRS_STATUS_ID   0x03
 #define FRAME_DRS_STATUS_BYTE 0 // nie można zmienić, tylko informacyjny
 #define FRAME_DRS_STATUS_BIT  0
 
