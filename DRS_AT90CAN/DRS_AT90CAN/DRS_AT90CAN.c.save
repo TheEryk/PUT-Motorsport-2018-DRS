@@ -18,8 +18,6 @@ const can_filter_t filtersetup = {0,0,{0}};
 #define DRS_MAX_OPEN_TICKS	500
 #define TIMER_MAX_VAL		0xFFFFFFFF
 
-#define DRS_MAX_CHANGE_TiCKS	15000
-
 //	stan DRSa (otwarty -> 1, zamkniety -> 0)
 uint8_t DRS_state = 0;
 
@@ -29,13 +27,6 @@ uint8_t CAN_frame_timeout_flag = 0;
 //	czy DRS jest umozliwiony (jesli dojdzie do awarii, czyli przepelnienia czasu otworzenia DRSa wylacz mozliwosc ponownego wlaczenia)
 //(dostepny -> 1, niedostepny -> 0)
 uint8_t DRS_available = 1;
-
-
-//	sposob dzialania DRSa
-//		0 - skrzydlo otwiera sie tak jak kierowca przyciska przycisk
-//		1 - skrzydlo caly czas zamkniete
-//		2 - skrzydlo caly czas otwarte
-uint8_t DRS_type = 0;
 
 //	stan licznika timera
 volatile uint64_t timer_counter = 0;
@@ -215,9 +206,6 @@ void TickTimerInit(){
 #define FRAME_DRS_SWITCH_BYTE 7
 #define FRAME_DRS_SWITCH_BIT  3 // tymczasowo gear up, zmienić we wtyczce zaktualizowac na 3
 
-#define FRAME_DRS_TYPE_ID	0x01
-#define FRAME_DRS_TYPE_BYTE	6
-
 #define FRAME_BRAKE_ID   0x01 // 0x01
 #define FRAME_BRAKE_BYTE 7 // 7
 #define FRAME_BRAKE_BIT  0 // 0
@@ -235,11 +223,11 @@ void CanThread()
 		//debug dostaje ramki
 		//PORTB ^= 1 << DDB3;
 		// ramka odebrana hamulca
-		if( rx_message.id == FRAME_DRS_SWITCH_ID && rx_message.length == 8 && !DRS_type)
+		if( rx_message.id == FRAME_DRS_SWITCH_ID && rx_message.length == 8)
 		{
 			DRS_timer_count = timer_counter;
 			CAN_frame_timeout_flag = 0;
-			
+			 
 			//debug dostaje ramki przycisku
 			//PORTB ^= 1 << DDB3;
 			
@@ -264,7 +252,7 @@ void CanThread()
 				DrsClose();
 			}
 		}
-		if( rx_message.id == FRAME_BRAKE_ID && !DRS_type)
+		if( rx_message.id == FRAME_BRAKE_ID )
 		{
 			DRS_timer_count = timer_counter;
 			CAN_frame_timeout_flag = 0;
@@ -279,25 +267,6 @@ void CanThread()
 				// drs available after braking stop
 				DRS_available = 1;
 			}
-		}
-		if( rx_message.id == FRAME_DRS_TYPE_ID){
-			int temp = (uint_8)rx_message.data[FRAME_DRS_TYPE_BYTE];
-			
-			if( temp <= 3 )
-				DRS_type = 0;
-			else if( temp >= 9 )
-				DRS_type = 2;
-			else
-				DRS_type = 1
-
-
-			if(DRS_type == 1){
-				DrsClose();
-			}
-			if(DRS_type == 2){
-				DrsOpen();
-			}
-			
 		}
 		
 	}
