@@ -15,10 +15,35 @@
 
 const can_filter_t filtersetup = {0,0,{0}};
 
-#define DRS_MAX_OPEN_TICKS	500
-#define TIMER_MAX_VAL		0xFFFFFFFF
+#define DRS_MAX_OPEN_TICKS		500
+#define TIMER_MAX_VAL			0xFFFFFFFF
 
-#define DRS_MAX_CHANGE_TiCKS	15000
+#define DRS_MAX_TYPE_CHANGE_TICKS	15000
+
+#define WGM1setting				0b1110 // fast PWM, Top ICR1
+#define PRESCALER_1				0b001
+#define ICR1_TOP				48048 // 16 000 000 / 48 048 = 333 Hz
+
+#define OCR1A_CLOSE				5400       // minimum 3300, skrajna pozycja
+#define OCR1A_OPEN				11000      // max 17700, skrajna pozycja
+
+#define OCR1B_CLOSE				11000	// 11000
+#define OCR1B_OPEN				5400	// 5400
+
+#define FRAME_DRS_SWITCH_ID		0x01
+#define FRAME_DRS_SWITCH_BYTE	7
+#define FRAME_DRS_SWITCH_BIT	3		// tymczasowo gear up, zmienić we wtyczce zaktualizowac na 3
+
+#define FRAME_DRS_TYPE_ID		0x01
+#define FRAME_DRS_TYPE_BYTE		6
+
+#define FRAME_BRAKE_ID			0x01	// 0x01
+#define FRAME_BRAKE_BYTE		7		// 7
+#define FRAME_BRAKE_BIT			0		// 0
+
+#define FRAME_DRS_STATUS_ID		0x03
+#define FRAME_DRS_STATUS_BYTE	0		// nie można zmienić, tylko informacyjny
+#define FRAME_DRS_STATUS_BIT	0
 
 //	stan DRSa (otwarty -> 1, zamkniety -> 0)
 uint8_t DRS_state = 0;
@@ -36,6 +61,9 @@ uint8_t DRS_available = 1;
 //		1 - skrzydlo caly czas zamkniete
 //		2 - skrzydlo caly czas otwarte
 uint8_t DRS_type = 0;
+
+//	flaga mowiaca o mozliwosci zmiany typu DRS. zmiania stan (na stale) po DRS_MAX_TYPE_CHANGE_TICKS/1000 sekundach
+uint8_t DRS_type_change_possible = 1;
 
 //	stan licznika timera
 volatile uint64_t timer_counter = 0;
@@ -71,20 +99,18 @@ ISR(TIMER0_COMP_vect)
 	}
 	
 	// jesli uplynie czas odświeżenia wiadomości CAN to zamknij DRS
-	if( DRS_timer_count + DRS_MAX_OPEN_TICKS < timer_counter ){
+	if( DRS_timer_count + DRS_MAX_OPEN_TICKS < timer_counter && DRS_type !=2 ){
 		// wyjebka DRSa
 		//DRS_available = 0;
 		CAN_frame_timeout_flag = 1;
 		DrsClose();
+		
+	}
+	
+	if(timer_counter >= DRS_MAX_TYPE_CHANGE_TICKS){
+		DRS_type_change_possible = 0;
 	}
 }
-
-/*
-Przerwanie timer 2{
-can_send_message(&msg)		//	ze stanem DRSa
-}
-
-*/
 
 void DrsPwmInit();
 void DrsOpen();
@@ -109,20 +135,6 @@ int main(void)
 
 	can_init(BITRATE_1_MBPS);
 	can_set_filter(1, &filtersetup);
-	
-	//can_t msg;
-
-	//msg.id = 0x22;
-	//msg.flags.rtr = 0;
-	//msg.flags.extended = 0;
-
-	//msg.length = 4;
-	//msg.data[0] = 0x01;
-	//msg.data[1] = 0x02;
-	//msg.data[2] = 0x03;
-	//msg.data[3] = 0x04;
-
-	//can_send_message(&msg);
 
 	// odblokowane przerwania dla CANa
 	sei();
@@ -136,16 +148,6 @@ int main(void)
 	}
 }
 
-#define WGM1setting 0b1110 // fast PWM, Top ICR1
-#define PRESCALER_1	0b001
-#define ICR1_TOP 48048 // 16 000 000 / 48 048 = 333 Hz
-
-//                             //nastawy drs // zakresy serwa
-#define OCR1A_CLOSE 5400       // minimum 3300, skrajna pozycja
-#define OCR1A_OPEN 11000      // max 17700, skrajna pozycja
-
-#define OCR1B_CLOSE 11000         // 11000
-#define OCR1B_OPEN 5400           // 5400
 
 void DrsPwmInit()
 {
@@ -209,23 +211,6 @@ void TickTimerInit(){
 	TIMSK0 = 1<<OCIE0A;
 }
 
-
-
-#define FRAME_DRS_SWITCH_ID   0x01
-#define FRAME_DRS_SWITCH_BYTE 7
-#define FRAME_DRS_SWITCH_BIT  3 // tymczasowo gear up, zmienić we wtyczce zaktualizowac na 3
-
-#define FRAME_DRS_TYPE_ID	0x01
-#define FRAME_DRS_TYPE_BYTE	6
-
-#define FRAME_BRAKE_ID   0x01 // 0x01
-#define FRAME_BRAKE_BYTE 7 // 7
-#define FRAME_BRAKE_BIT  0 // 0
-
-#define FRAME_DRS_STATUS_ID   0x03
-#define FRAME_DRS_STATUS_BYTE 0 // nie można zmienić, tylko informacyjny
-#define FRAME_DRS_STATUS_BIT  0
-
 void CanThread()
 {
 	static can_t rx_message; // received message structure
@@ -264,7 +249,7 @@ void CanThread()
 				DrsClose();
 			}
 		}
-		if( rx_message.id == FRAME_BRAKE_ID && !DRS_type)
+		if( rx_message.id == FRAME_BRAKE_ID)
 		{
 			DRS_timer_count = timer_counter;
 			CAN_frame_timeout_flag = 0;
@@ -280,15 +265,18 @@ void CanThread()
 				DRS_available = 1;
 			}
 		}
-		if( rx_message.id == FRAME_DRS_TYPE_ID){
-			int temp = (uint_8)rx_message.data[FRAME_DRS_TYPE_BYTE];
+		if( rx_message.id == FRAME_DRS_TYPE_ID && DRS_type_change_possible){
+			int temp = rx_message.data[FRAME_DRS_TYPE_BYTE];
 			
-			if( temp <= 3 )
+			if( temp <= 3 ){
 				DRS_type = 0;
-			else if( temp >= 9 )
+			}
+			else if( temp >= 9 ){
 				DRS_type = 2;
-			else
-				DRS_type = 1
+			}
+			else{
+				DRS_type = 1;
+			}
 
 
 			if(DRS_type == 1){
@@ -298,6 +286,13 @@ void CanThread()
 				DrsOpen();
 			}
 			
+		}
+		else if(rx_message.id == FRAME_DRS_TYPE_ID && !DRS_type_change_possible){
+			int temp = rx_message.data[FRAME_DRS_TYPE_BYTE];
+			if(temp > 3 && temp < 9){
+				DRS_type = 1;
+				DrsClose();
+			}
 		}
 		
 	}
